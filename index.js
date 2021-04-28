@@ -18,7 +18,13 @@ for (const file of commandFiles) {
 }
 
 // setup state holder with queue, volume, voice channel, text channel
-// TODO
+const queueHolder = {
+    textChannel,
+    voiceChannel,
+    connection,
+    songs: [],
+    volume: 1
+};
 
 // Connection updates
 client.once('ready', () => {
@@ -45,7 +51,7 @@ client.on('message', async message => {
 
     // command execution
 	try {
-        command.execute(message, args);   
+        command.execute(message, args, queueHolder);   
     } catch (error) {
         console.error(error);
         message.reply('there was an error trying to execute that command!');
