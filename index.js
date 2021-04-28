@@ -19,9 +19,9 @@ for (const file of commandFiles) {
 
 // setup state holder with queue, volume, voice channel, text channel
 const queueHolder = {
-    textChannel,
-    voiceChannel,
-    connection,
+    textChannel: null,
+    voiceChannel: null,
+    connection: null,
     songs: [],
     volume: 1
 };
