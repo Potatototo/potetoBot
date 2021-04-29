@@ -8,7 +8,9 @@ module.exports = {
 		}
 		try {
 			console.log(`Joining ${vc.name}`);
-			var connection = await vc.join();
+			queueHolder.textChannel = message.textChannel;
+			queueHolder.voiceChannel = vc;
+			queueHolder.connection = await vc.join();
 		} catch (err) {
 			console.log(err);
 		}

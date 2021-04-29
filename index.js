@@ -26,6 +26,7 @@ const queueHolder = {
     textChannel: null,
     voiceChannel: null,
     connection: null,
+    dispatcher: null,
     songs: [],
     volume: 1
 };
