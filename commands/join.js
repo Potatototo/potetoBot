@@ -1,6 +1,6 @@
 module.exports = {
 	name: 'join',
-	description: 'Joins voice channel of sender.',
+	description: 'Join your voice channel.',
 	async execute(message, args, queueHolder) {
 		const vc = message.member.voice.channel;
 		if (!vc) {

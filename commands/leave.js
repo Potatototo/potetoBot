@@ -1,6 +1,6 @@
 module.exports = {
 	name: 'leave',
-	description: 'Leaves voice channel of sender.',
+	description: 'Leave your voice channel.',
 	async execute(message, args, queueHolder) {
 		const vc = message.member.voice.channel;
 		if (!vc) {

@@ -1,7 +1,9 @@
 const ytdl = require('ytdl-core');
 module.exports = {
 	name: 'play',
-	description: 'Plays song from youtube link.',
+	alias: 'p',
+	usage: '<link>',
+	description: 'Play song from youtube link.',
 	async execute(message, args, queueHolder) {
 		const vc = message.member.voice.channel;
 			if (!vc) {

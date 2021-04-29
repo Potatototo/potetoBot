@@ -1,6 +1,7 @@
 module.exports = {
 	name: 'skip',
-	description: 'Skips currently playing song.',
+	alias: 's',
+	description: 'Skip current song.',
 	execute(message, args, queueHolder) {
 		message.channel.send('Pong.');
 	},

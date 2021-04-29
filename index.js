@@ -15,10 +15,14 @@ const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('
 for (const file of commandFiles) {
 	const command = require(`./commands/${file}`);
 	client.commands.set(command.name, command);
+    if (command.alias != '') {
+        client.commands.set(command.alias, command);
+    }
 }
 
 // setup state holder with queue, volume, voice channel, text channel
 const queueHolder = {
+    prefix: prefix,
     textChannel: null,
     voiceChannel: null,
     connection: null,
