@@ -1,7 +1,7 @@
 #!/bin/bash
 function start() {
-  docker build -rm -t potetobot_image .
-  docker run -d -name potetobot_container potetobot_image
+  docker build --rm -t potetobot_image .
+  docker run -d --name potetobot_container potetobot_image
 }
 
 function stop() {
