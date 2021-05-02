@@ -8,7 +8,6 @@ module.exports = {
 		}
 		try {
 			console.log(`Joining ${vc.name}`);
-			queueHolder.textChannel = message.textChannel;
 			queueHolder.voiceChannel = vc;
 			queueHolder.connection = await vc.join();
 		} catch (err) {

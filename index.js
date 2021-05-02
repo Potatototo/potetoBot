@@ -28,7 +28,8 @@ const queueHolder = {
     connection: null,
     dispatcher: null,
     songs: [],
-    volume: 1
+    playing : false,
+    volume: 0.2
 };
 
 // Connection updates

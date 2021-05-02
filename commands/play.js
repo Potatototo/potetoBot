@@ -14,11 +14,6 @@ module.exports = {
 		}
 
 		try {
-			if (!queueHolder.textChannel) {
-				message.textChannel;
-				console.log('Text Channel set')
-			}
-
 			if (!queueHolder.voiceChannel) {
 				queueHolder.voiceChannel = vc;
 				console.log('Voice Channel set')
@@ -29,30 +24,34 @@ module.exports = {
 				console.log('Connection set')
 			}
 			
-			if (!queueHolder.dispatcher) {
+			const songInfo = await ytdl.getInfo(args[0]);
 
+			if (!queueHolder.dispatcher || !queueHolder.playing) {
+				this.play(songInfo.videoDetails.video_url, queueHolder);
+				queueHolder.playing = true;
+				message.channel.send(`Now playing **${songInfo.videoDetails.title}**!`);
 			} else {
-
+				queueHolder.songs.push(songInfo.videoDetails.video_url);
+				message.channel.send(`Added **${songInfo.videoDetails.title}** to the queue!`);
 			}
-			queueHolder.dispatcher = queueHolder.connection.play(ytdl(args[0])).on('error', error => console.error(error));
-			dispatcher.setVolumeLogarithmic(0.25);
+			
 		} catch (err) {
 			message.channel.send(`Oh no something went wrong :(\n${err}`);
 			console.error(err);
 		}
 	},
 
-	play(song) {
+	play(song, queueHolder) {
 		if (!song) {
+			queueHolder.playing = false;
 			return;
 		}
-		queueHolder.dispatcher = queueHolder.connection
-			.play(ytdl(song))
-			.on('finish', () => {
-				queueHolder.songs.shift();
-				this.play(queueHolder.songs[0]);
-			})
-			.on('error', err => console.error(err));
+		queueHolder.dispatcher = queueHolder.connection.play(ytdl(song))
+		queueHolder.dispatcher.on('finish', () => {
+			console.log("finish");
+			this.play(queueHolder.songs.shift(), queueHolder);
+		});
+		queueHolder.dispatcher.on('error', err => console.error(err));
 		queueHolder.dispatcher.setVolumeLogarithmic(queueHolder.volume);
 	},
 };

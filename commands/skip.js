@@ -3,6 +3,11 @@ module.exports = {
 	alias: 's',
 	description: 'Skip current song.',
 	execute(message, args, queueHolder) {
-		message.channel.send('Pong.');
+		if (!message.member.voice.channel) return message.channel.send('You have to be in a voice channel to skipthis song!');
+		try {
+			queueHolder.dispatcher.end();
+		} catch (err) {
+			console.error(err);
+		}
 	},
 };
