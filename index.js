@@ -6,7 +6,7 @@ const {
 const ytdl = require('ytdl-core');
 const fs = require('fs');
 
-const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS] });
+const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES] });
 
 // load commands
 client.commands = new Discord.Collection();
@@ -44,7 +44,7 @@ client.once('disconnect', () => {
 });
 
 // Command handling
-client.on('message', async message => {
+client.on('messageCreate', async message => {
     // no prefix
     if (message.author.bot || !message.content.startsWith(prefix)) return;
 
