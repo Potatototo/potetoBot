@@ -1,10 +1,11 @@
 {
   "dependencies": {
     "@discordjs/opus": "^0.5.0",
-    "discord.js": "^12.5.3",
+    "discord.js": "^13.1.0",
     "ffmpeg": "^0.0.4",
     "fluent-ffmpeg": "^2.1.2",
     "node": "^16.0.0",
+    "npm": "^7.23.0",
     "prism-media": "github:hydrabolt/prism-media",
     "ytdl-core": "^4.5.0"
   }
