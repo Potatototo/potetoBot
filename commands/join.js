@@ -23,14 +23,14 @@ module.exports = {
 			});
 			await entersState(connection, VoiceConnectionStatus.Ready, 5000);
 			player = createAudioPlayer();
-			/*  needed?
 			player.on('stateChange', (oldState, newState) => {
 				if (newState.status === AudioPlayerStatus.Idle) {
 					console.log("finish");
-					this.play(queueHolder.songs.shift().video_url, queueHolder);
+					if (queueHolder.songs.length > 0) {
+						this.play(queueHolder.songs.shift().video_url, queueHolder);
+					}		
 				}
 			});
-			*/
 			queueHolder.subscription = connection.subscribe(player);
 		} catch (err) {
 			console.log(err);

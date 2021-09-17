@@ -4,7 +4,7 @@ const { createAudioPlayer
 			, joinVoiceChannel
 			, AudioPlayerStatus
 			, VoiceConnectionStatus
-	} = require('@discordjs/voice')
+	} = require('@discordjs/voice');
 
 const ytdl = require('ytdl-core');
 
@@ -34,7 +34,9 @@ module.exports = {
 				player.on('stateChange', (oldState, newState) => {
 					if (newState.status === AudioPlayerStatus.Idle) {
 						console.log("Song finished");
-						this.play(queueHolder.songs.shift().video_url, queueHolder);
+						if (queueHolder.songs.length > 0) {
+							this.play(queueHolder.songs.shift().video_url, queueHolder);
+						}
 					}
 				});
 				queueHolder.subscription = connection.subscribe(player);
@@ -59,9 +61,7 @@ module.exports = {
 	},
 
 	play(song, queueHolder) {
-		if (song) {
-			const resource = createAudioResource(ytdl(song));
-			queueHolder.subscription.player.play(resource);
-		}
+		const resource = createAudioResource(ytdl(song));
+		queueHolder.subscription.player.play(resource);
 	}
 };
