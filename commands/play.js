@@ -50,7 +50,8 @@ module.exports = {
 			let songInfo;
 			console.log("args: ", (args[0].indexOf('http') === -1));
 			if (args[0].indexOf('http') === -1) {
-				const search = await fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=${args[0]}&key=AIzaSyBxWcgRWmI1p1ACOJsTSlIrsKwf7vn6X0A`)
+				const keystring = args.join(' ');
+				const search = await fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=${keystring}&key=AIzaSyBxWcgRWmI1p1ACOJsTSlIrsKwf7vn6X0A`)
         			.then(response => response.json());	
 				songInfo = await ytdl.getInfo(search.items[0].id.videoId);
 			} else {
