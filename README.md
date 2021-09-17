@@ -6,9 +6,9 @@
 | Pause / Resume Commands                 | :white_check_mark: |
 | Queue View Command                      | :white_check_mark: |
 | Now Playing Command                     | :white_check_mark: |
-| Queue Remove Command                    |                    |
+| Queue Remove Command                    | Daniel             |
 | PlayTop Command                         |                    |
 | Reimplement Volume Settings for new API |                    |
 | Ping Functionality                      | :white_check_mark: |
 | Command Categories to sort in Help View |                    |
-| Put all Messages in Embeds              |                    |
+| Pretty Print Help Dialogue              |                    |
