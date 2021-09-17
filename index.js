@@ -6,7 +6,7 @@ const {
 const ytdl = require('ytdl-core');
 const fs = require('fs');
 
-const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES] });
+const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES, Discord.Intents.FLAGS.GUILD_VOICE_STATES] });
 
 // load commands
 client.commands = new Discord.Collection();
@@ -24,11 +24,8 @@ for (const file of commandFiles) {
 const queueHolder = {
     prefix: prefix,
     textChannel: null,
-    voiceChannel: null,
-    connection: null,
-    dispatcher: null,
+    subscription: null,
     songs: [],
-    playing : false,
     volume: 0.2
 };
 
@@ -57,7 +54,7 @@ client.on('messageCreate', async message => {
 
     // command execution
 	try {
-        command.execute(message, args, queueHolder);   
+        command.execute(message, args, queueHolder);
     } catch (error) {
         console.error(error);
         message.reply('there was an error trying to execute that command!');

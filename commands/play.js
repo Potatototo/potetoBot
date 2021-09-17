@@ -1,4 +1,13 @@
+const { createAudioPlayer
+			, createAudioResource
+			, entersState
+			, joinVoiceChannel
+			, AudioPlayerStatus
+			, VoiceConnectionStatus
+	} = require('@discordjs/voice')
+
 const ytdl = require('ytdl-core');
+
 module.exports = {
 	name: 'play',
 	alias: 'p',
@@ -19,22 +28,34 @@ module.exports = {
 				console.log('Voice Channel set')
 			}
 
-			if (!queueHolder.connection) {
-				queueHolder.connection = await queueHolder.voiceChannel.join();
-				console.log('Connection set')
+			if (!queueHolder.subscription) {
+				connection = joinVoiceChannel({
+					channelId: vc.id,
+					guildId: vc.guild.id,
+					adapterCreator: vc.guild.voiceAdapterCreator
+				});
+				await entersState(connection, VoiceConnectionStatus.Ready, 5000);
+				player = createAudioPlayer();
+				player.on('stateChange', (oldState, newState) => {
+					if (newState.status === AudioPlayerStatus.Idle) {
+						console.log("Song finished");
+						this.play(queueHolder.songs.shift(), queueHolder);
+					}
+				});
+				queueHolder.subscription = connection.subscribe(player);
+				console.log('Connection set');
 			}
-			
+
 			const songInfo = await ytdl.getInfo(args[0]);
 
-			if (!queueHolder.dispatcher || !queueHolder.playing) {
+			if (queueHolder.subscription.player.state.status === AudioPlayerStatus.Idle) {
 				this.play(songInfo.videoDetails.video_url, queueHolder);
-				queueHolder.playing = true;
 				message.channel.send(`Now playing **${songInfo.videoDetails.title}**!`);
 			} else {
 				queueHolder.songs.push(songInfo.videoDetails.video_url);
 				message.channel.send(`Added **${songInfo.videoDetails.title}** to the queue!`);
 			}
-			
+
 		} catch (err) {
 			message.channel.send(`Oh no something went wrong :(\n${err}`);
 			console.error(err);
@@ -42,16 +63,9 @@ module.exports = {
 	},
 
 	play(song, queueHolder) {
-		if (!song) {
-			queueHolder.playing = false;
-			return;
+		if (song) {
+			const resource = createAudioResource(ytdl(song));
+			queueHolder.subscription.player.play(resource);
 		}
-		queueHolder.dispatcher = queueHolder.connection.play(ytdl(song))
-		queueHolder.dispatcher.on('finish', () => {
-			console.log("finish");
-			this.play(queueHolder.songs.shift(), queueHolder);
-		});
-		queueHolder.dispatcher.on('error', err => console.error(err));
-		queueHolder.dispatcher.setVolumeLogarithmic(queueHolder.volume);
-	},
+	}
 };

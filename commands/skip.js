@@ -5,7 +5,7 @@ module.exports = {
 	execute(message, args, queueHolder) {
 		if (!message.member.voice.channel) return message.channel.send('You have to be in a voice channel to skip this song!');
 		try {
-			queueHolder.dispatcher.end();
+			queueHolder.subscription.player.stop();
 		} catch (err) {
 			console.error(err);
 		}

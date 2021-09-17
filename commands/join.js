@@ -1,3 +1,10 @@
+const { createAudioPlayer
+			, entersState
+			, joinVoiceChannel
+			, AudioPlayerStatus
+			, VoiceConnectionStatus
+	} = require('@discordjs/voice')
+
 module.exports = {
 	name: 'join',
 	description: 'Join your voice channel.',
@@ -9,10 +16,22 @@ module.exports = {
 		try {
 			console.log(`Joining ${vc.name}`);
 			queueHolder.voiceChannel = vc;
-			queueHolder.connection = await vc.join();
+			const connection = joinVoiceChannel({
+				channelId: vc.id,
+				guildId: vc.guild.id,
+				adapterCreator: vc.guild.voiceAdapterCreator
+			});
+			await entersState(connection, VoiceConnectionStatus.Ready, 5000);
+			player = createAudioPlayer();
+			player.on('stateChange', (oldState, newState) => {
+				if (newState.status === AudioPlayerStatus.Idle) {
+					console.log("finish");
+					this.play(queueHolder.songs.shift(), queueHolder);
+				}
+			});
+			queueHolder.subscription = connection.subscribe(player);
 		} catch (err) {
 			console.log(err);
 		}
-		
-	},
+	}
 };
