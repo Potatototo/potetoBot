@@ -2,7 +2,7 @@
 ## TODO
 | Issue                                   | Dev    |
 |-----------------------------------------|--------|
-| YouTube Search                          | Paul   |
+| YouTube Search                          | - [x]  |
 | Pause / Resume Commands                 |        |
 | Queue View Command                      | Sibi   |
 | Now Playing Command                     | Sibi   |
