@@ -1,5 +1,0 @@
-./docker_manager.sh start
-
-./docker_manager.sh stop
-
-./docker_manager.sh restart
