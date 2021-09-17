@@ -1,4 +1,4 @@
-FROM node:lts
+FROM node:16.9.1
 
 WORKDIR /app
 
