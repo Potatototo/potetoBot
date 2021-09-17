@@ -7,6 +7,7 @@ const { createAudioPlayer
 	} = require('@discordjs/voice');
 const ytdl = require('ytdl-core');
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));;
+const { MessageEmbed } = require('discord.js');
 
 module.exports = {
 	name: 'play',
@@ -62,10 +63,20 @@ module.exports = {
 			if (queueHolder.subscription.player.state.status === AudioPlayerStatus.Idle) {
 				this.play(songInfo.videoDetails.video_url, queueHolder);
 				queueHolder.currentSong = songInfo.videoDetails.title;
-				message.channel.send(`Now playing **${songInfo.videoDetails.title}**!`);
+				const e = new MessageEmbed()
+					.setColor('#E6722E')
+					.setAuthor('potetoBot', 'https://i.imgur.com/8HzsYp9.png')
+					.addField('\u200b', `Now playing **${songInfo.videoDetails.title}**!`, false)
+					.setTimestamp()
+				message.channel.send({ embeds: [e] });
 			} else {
 				queueHolder.songs.push(songInfo.videoDetails);
-				message.channel.send(`Added **${songInfo.videoDetails.title}** to the queue!`);
+				const e = new MessageEmbed()
+					.setColor('#E6722E')
+					.setAuthor('potetoBot', 'https://i.imgur.com/8HzsYp9.png')
+					.addField('\u200b', `Added **${songInfo.videoDetails.title}** to the queue!`, false)
+					.setTimestamp()
+				message.channel.send({ embeds: [e] });
 			}
 
 		} catch (err) {
