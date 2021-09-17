@@ -35,7 +35,11 @@ module.exports = {
 					if (newState.status === AudioPlayerStatus.Idle) {
 						console.log("Song finished");
 						if (queueHolder.songs.length > 0) {
-							this.play(queueHolder.songs.shift().video_url, queueHolder);
+							nextSong = queueHolder.song.shift();
+							queueHolder.currentSong = nextSong.title;
+							this.play(nextSong.video_url, queueHolder);
+						} else {
+							queueHolder.currentSong = null;
 						}
 					}
 				});
