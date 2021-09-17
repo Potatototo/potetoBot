@@ -4,3 +4,4 @@ ffmpeg
 node_modules
 package-lock.json
 config.json
+*.sh
