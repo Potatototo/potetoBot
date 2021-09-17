@@ -25,7 +25,8 @@ const queueHolder = {
     prefix: prefix,
     textChannel: null,
     subscription: null,
-    songs: [],
+    songs: [], // videoDetails objects
+    currentSong: null,
     volume: 0.2
 };
 

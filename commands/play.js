@@ -23,11 +23,6 @@ module.exports = {
 		}
 
 		try {
-			if (!queueHolder.voiceChannel) {
-				queueHolder.voiceChannel = vc;
-				console.log('Voice Channel set')
-			}
-
 			if (!queueHolder.subscription) {
 				connection = joinVoiceChannel({
 					channelId: vc.id,
@@ -39,7 +34,7 @@ module.exports = {
 				player.on('stateChange', (oldState, newState) => {
 					if (newState.status === AudioPlayerStatus.Idle) {
 						console.log("Song finished");
-						this.play(queueHolder.songs.shift(), queueHolder);
+						this.play(queueHolder.songs.shift().video_url, queueHolder);
 					}
 				});
 				queueHolder.subscription = connection.subscribe(player);
@@ -50,9 +45,10 @@ module.exports = {
 
 			if (queueHolder.subscription.player.state.status === AudioPlayerStatus.Idle) {
 				this.play(songInfo.videoDetails.video_url, queueHolder);
+				queueHolder.currentSong = songInfo.videoDetails.title;
 				message.channel.send(`Now playing **${songInfo.videoDetails.title}**!`);
 			} else {
-				queueHolder.songs.push(songInfo.videoDetails.video_url);
+				queueHolder.songs.push(songInfo.videoDetails);
 				message.channel.send(`Added **${songInfo.videoDetails.title}** to the queue!`);
 			}
 
