@@ -27,7 +27,9 @@ module.exports = {
 				if (newState.status === AudioPlayerStatus.Idle) {
 					console.log("finish");
 					if (queueHolder.songs.length > 0) {
-						this.play(queueHolder.songs.shift().video_url, queueHolder);
+						nextSong = queueHolder.song.shift();
+						queueHolder.currentSong = nextSong.title + ' - ' + nextSong.ownerChannelName;
+						this.play(nextSong.video_url, queueHolder);
 					}		
 				}
 			});

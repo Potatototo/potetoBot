@@ -1,3 +1,5 @@
+const { MessageEmbed } = require('discord.js');
+
 module.exports = {
 	name: 'nowplaying',
 	alias: 'np',
@@ -5,12 +7,27 @@ module.exports = {
 	execute(message, args, queueHolder) {
 		const vc = message.member.voice.channel;
 		if (!vc) {
-			return message.channel.send('You need to be in a voice channel for this!');
+			const e = new MessageEmbed()
+				.setColor('#E6722E')
+				.setAuthor('potetoBot', 'https://i.imgur.com/8HzsYp9.png')
+				.addField('\u200b', 'You need to be in a voice channel for this!', false)
+				.setTimestamp()
+			message.channel.send({ embeds: [e] });
 		}
 		if (queueHolder.currentSong) {
-			message.channel.send('Currently playing:\n     **' + queueHolder.currentSong + '**');
+			const e = new MessageEmbed()
+				.setColor('#E6722E')
+				.setAuthor('potetoBot', 'https://i.imgur.com/8HzsYp9.png')
+				.addField('Currently playing', queueHolder.currentSong, false)
+				.setTimestamp()
+			message.channel.send({ embeds: [e] });
 		} else {
-			message.channel.send('Nothing is playing at the moment.');
+			const e = new MessageEmbed()
+				.setColor('#E6722E')
+				.setAuthor('potetoBot', 'https://i.imgur.com/8HzsYp9.png')
+				.addField('\u200b', 'Nothing is playing at the moment.', false)
+				.setTimestamp()
+			message.channel.send({ embeds: [e] });
 		}
 	},
 };

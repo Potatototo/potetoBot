@@ -37,7 +37,7 @@ module.exports = {
 						console.log("Song finished");
 						if (queueHolder.songs.length > 0) {
 							nextSong = queueHolder.song.shift();
-							queueHolder.currentSong = nextSong.title;
+							queueHolder.currentSong = nextSong.title + ' - ' + nextSong.ownerChannelName;
 							this.play(nextSong.video_url, queueHolder);
 						} else {
 							queueHolder.currentSong = null;
@@ -49,7 +49,6 @@ module.exports = {
 			}
 			
 			let songInfo;
-			console.log("args: ", (args[0].indexOf('http') === -1));
 			if (args[0].indexOf('http') === -1) {
 				const keystring = args.join(' ');
 				const search = await fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=${keystring}&key=AIzaSyBxWcgRWmI1p1ACOJsTSlIrsKwf7vn6X0A`)
@@ -62,11 +61,11 @@ module.exports = {
 
 			if (queueHolder.subscription.player.state.status === AudioPlayerStatus.Idle) {
 				this.play(songInfo.videoDetails.video_url, queueHolder);
-				queueHolder.currentSong = songInfo.videoDetails.title;
+				queueHolder.currentSong = songInfo.videoDetails.title + ' - ' + songInfo.videoDetails.ownerChannelName;
 				const e = new MessageEmbed()
 					.setColor('#E6722E')
 					.setAuthor('potetoBot', 'https://i.imgur.com/8HzsYp9.png')
-					.addField('\u200b', `Now playing **${songInfo.videoDetails.title}**!`, false)
+					.addField('Now playing', songInfo.videoDetails.title + ' - ' + songInfo.videoDetails.ownerChannelName, false)
 					.setTimestamp()
 				message.channel.send({ embeds: [e] });
 			} else {
@@ -74,7 +73,7 @@ module.exports = {
 				const e = new MessageEmbed()
 					.setColor('#E6722E')
 					.setAuthor('potetoBot', 'https://i.imgur.com/8HzsYp9.png')
-					.addField('\u200b', `Added **${songInfo.videoDetails.title}** to the queue!`, false)
+					.addField('Added to Queue', songInfo.videoDetails.title + ' - ' + songInfo.videoDetails.ownerChannelName, false)
 					.setTimestamp()
 				message.channel.send({ embeds: [e] });
 			}
