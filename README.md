@@ -1,7 +1,7 @@
 # Der krasseste Music Bot, den die Welt je gesehen hat
 ## TODO
 | Issue                                   | Dev       |
-|-----------------------------------------|-----------|
+|-----------------------------------------|:---------:|
 | YouTube Search                          | - [x] Done|
 | Pause / Resume Commands                 |           |
 | Queue View Command                      | Sibi      |
