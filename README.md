@@ -11,3 +11,4 @@
 | Reimplement Volume Settings for new API |           |
 | Ping Functionality                      |           |
 | Command Categories to sort in Help View |           |
+| Put all Messages in Embeds              |           |
