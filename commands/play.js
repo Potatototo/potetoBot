@@ -5,8 +5,8 @@ const { createAudioPlayer
 			, AudioPlayerStatus
 			, VoiceConnectionStatus
 	} = require('@discordjs/voice');
-
 const ytdl = require('ytdl-core');
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));;
 
 module.exports = {
 	name: 'play',
@@ -46,8 +46,17 @@ module.exports = {
 				queueHolder.subscription = connection.subscribe(player);
 				console.log('Connection set');
 			}
-
-			const songInfo = await ytdl.getInfo(args[0]);
+			
+			let songInfo;
+			console.log("args: ", (args[0].indexOf('http') === -1));
+			if (args[0].indexOf('http') === -1) {
+				const search = await fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=${args[0]}&key=AIzaSyBxWcgRWmI1p1ACOJsTSlIrsKwf7vn6X0A`)
+        			.then(response => response.json());	
+				songInfo = await ytdl.getInfo(search.items[0].id.videoId);
+			} else {
+				songInfo = await ytdl.getInfo(args[0]);
+			}
+			
 
 			if (queueHolder.subscription.player.state.status === AudioPlayerStatus.Idle) {
 				this.play(songInfo.videoDetails.video_url, queueHolder);
