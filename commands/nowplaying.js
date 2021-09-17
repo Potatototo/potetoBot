@@ -8,7 +8,7 @@ module.exports = {
 			return message.channel.send('You need to be in a voice channel for this!');
 		}
 		if (queueHolder.currentSong) {
-			message.channel.send('Currently playing:\n     ' + queueHolder.currentSong);
+			message.channel.send('Currently playing:\n     **' + queueHolder.currentSong + '**');
 		} else {
 			message.channel.send('Nothing is playing at the moment.');
 		}
