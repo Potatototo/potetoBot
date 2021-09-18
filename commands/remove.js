@@ -9,7 +9,7 @@ module.exports = {
 		if (!args[0]) return message.channel.send('Please specify a queue position!');
 
 		const pos = parseInt(args[0]);
-		if (isNaN(pos) || pos < 1) return message.channel.send('Invalid queue position!');
+		if (isNaN(pos) || pos < 1 || pos > queueHolder.songs.length) return message.channel.send('Invalid queue position!');
 
 		const removed = queueHolder.songs.splice(pos - 1, 1);
 		const e = new MessageEmbed()
