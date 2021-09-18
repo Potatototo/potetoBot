@@ -4,6 +4,7 @@ module.exports = {
 	name: 'nowplaying',
 	alias: 'np',
 	description: 'Currently playing song',
+	category: 'queue',
 	execute(message, args, queueHolder) {
 		const vc = message.member.voice.channel;
 		const e = new MessageEmbed()
@@ -17,7 +18,6 @@ module.exports = {
 		} else {
 			e.addField('\u200b', 'Nothing is playing at the moment.', false);
 		}
-		e.setTimestamp();
 		message.channel.send({ embeds: [e] });
 	},
 };

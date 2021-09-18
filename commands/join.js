@@ -9,14 +9,13 @@ const { createAudioPlayer
 module.exports = {
 	name: 'join',
 	description: 'Join your voice channel.',
+	category: 'utility',
 	async execute(message, args, queueHolder) {
 		const vc = message.member.voice.channel;
 		if (!vc) {
 			const e = new MessageEmbed()
 				.setColor('#E6722E')
-				.setAuthor('potetoBot', 'https://i.imgur.com/8HzsYp9.png')
-		    	.addField('Error', 'You need to be in a voice channel for this!', false)
-				.setTimestamp();
+		    	.addField('Error', 'You need to be in a voice channel for this!', false);
 			return message.channel.send({ embeds: [e] });
 		}
 		try {

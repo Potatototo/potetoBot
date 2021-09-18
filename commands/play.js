@@ -12,24 +12,23 @@ const { MessageEmbed } = require('discord.js');
 module.exports = {
 	name: 'play',
 	alias: 'p',
-	usage: '<link>',
-	description: 'Play song from youtube link.',
+	usage: '<title/link>',
+	description: 'Play given song.',
+	category: 'music',
 	async execute(message, args, queueHolder) {
 		const vc = message.member.voice.channel;
 		if (!vc) {
 			const e = new MessageEmbed()
 				.setColor('#E6722E')
 				.setAuthor('potetoBot', 'https://i.imgur.com/8HzsYp9.png')
-		    	.addField('Error', 'You need to be in a voice channel for this!', false)
-				.setTimestamp();
+		    	.addField('Error', 'You need to be in a voice channel for this!', false);
 			return message.channel.send({ embeds: [e] });
 		}
 		if (!args[0]) {
 			const e = new MessageEmbed()
 				.setColor('#E6722E')
 				.setAuthor('potetoBot', 'https://i.imgur.com/8HzsYp9.png')
-		    	.addField('Error', 'You need to give me a link!', false)
-				.setTimestamp();
+		    	.addField('Error', 'You need to give me a link!', false);
 			return message.channel.send({ embeds: [e] });
 		}
 
@@ -92,8 +91,7 @@ module.exports = {
 			const e = new MessageEmbed()
 				.setColor('#E6722E')
 				.setAuthor('potetoBot', 'https://i.imgur.com/8HzsYp9.png')
-		    	.addField('Error', `Oh no something went wrong :(\n${err}`, false)
-				.setTimestamp();
+		    	.addField('Error', `Oh no something went wrong :(\n${err}`, false);
 			message.channel.send({ embeds: [e] });
 			console.error(err);
 		}

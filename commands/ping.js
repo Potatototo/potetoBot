@@ -1,6 +1,7 @@
 module.exports = {
 	name: 'ping',
 	description: 'Pong!',
+	category: 'utility',
 	execute(message, args, queueHolder) {
 		message.channel.send("Pinging...").then(m =>{
             ping = m.createdTimestamp - message.createdTimestamp;

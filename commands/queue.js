@@ -5,6 +5,7 @@ module.exports = {
     alias: 'q',
     usage: '<page>',
 	description: 'Show current queue.',
+	category: 'queue',
 	execute(message, args, queueHolder) {
 		page = 1;
 		songCount = queueHolder.songs.length;
@@ -14,8 +15,8 @@ module.exports = {
 			const e = new MessageEmbed()
 				.setColor('#E6722E')
 				.setAuthor('potetoBot', 'https://i.imgur.com/8HzsYp9.png')
-		    	.addField('Error', 'Page does not exist!', false)
-				.setTimestamp();
+		    	.addField('Error', 'Page does not exist!', false);
+				
 			return message.channel.send({ embeds: [e] });
 		}
 

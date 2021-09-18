@@ -4,8 +4,11 @@ const { MessageEmbed } = require('discord.js');
 module.exports = {
 	name: 'help',
 	description: 'List all available commands.',
+	category: 'utility',
 	execute(message, args, queueHolder) {
-		let str = '';
+		let m = '';
+		let q = '';
+		let u = '';
 		const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
 
 		for (const file of commandFiles) {
@@ -19,16 +22,19 @@ module.exports = {
             if (command.usage != undefined) {
                 line += ` ${command.usage}`;
             }
+            line += ` - ${command.description}`;
 
-            line += `\n        ${command.description}\n`;
-            str += line + '\n';
+			if (command.category == 'music') m += line + '\n';
+            else if (command.category == 'queue') q += line + '\n';
+			else if (command.category == 'utility') u += line + '\n';
 		}
 
 		const e = new MessageEmbed()
 			.setColor('#E6722E')
 			.setAuthor('potetoBot', 'https://i.imgur.com/8HzsYp9.png')
-		   	.addField('List of commands', str, false)
-			.setTimestamp();
+		   	.addField('Music', m, false)
+			.addField('Queue', q, false)
+			.addField('Utility', u, false);
 		message.channel.send({ embeds: [e] });
 	},
 };
