@@ -74,16 +74,14 @@ module.exports = {
 				const e = new MessageEmbed()
 					.setColor('#E6722E')
 					.setAuthor('potetoBot', 'https://i.imgur.com/8HzsYp9.png')
-					.addField('Now playing', songInfo.videoDetails.title + ' - ' + songInfo.videoDetails.ownerChannelName, false)
-					.setTimestamp()
+					.addField('Now playing', songInfo.videoDetails.title + ' - ' + songInfo.videoDetails.ownerChannelName, false);
 				message.channel.send({ embeds: [e] });
 			} else {
 				queueHolder.songs.push(songInfo.videoDetails);
 				const e = new MessageEmbed()
 					.setColor('#E6722E')
 					.setAuthor('potetoBot', 'https://i.imgur.com/8HzsYp9.png')
-					.addField('Added to Queue', songInfo.videoDetails.title + ' - ' + songInfo.videoDetails.ownerChannelName, false)
-					.setTimestamp()
+					.addField('Added to Queue', songInfo.videoDetails.title + ' - ' + songInfo.videoDetails.ownerChannelName, false);
 				message.channel.send({ embeds: [e] });
 			}
 

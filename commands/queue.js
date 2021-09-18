@@ -29,8 +29,7 @@ module.exports = {
 				e.addField('\u200b', i + 1 + '. ' + queueHolder.songs[i].title + ' - ' + queueHolder.songs[i].ownerChannelName, false);
 			}
 		}
-		e.setTimestamp()
-			.setFooter('Page ' + page + '/' + Math.ceil(Math.max(1, songCount / 10)));
+		e.setFooter('Page ' + page + '/' + Math.ceil(Math.max(1, songCount / 10)));
 
 		message.channel.send({ embeds: [e] });
 	},
