@@ -10,6 +10,7 @@
 | PlayTop Command                         |                    |
 | Reimplement Volume Settings for new API |                    |
 | Ping Functionality                      | :white_check_mark: |
-| Command Categories to sort in Help View |                    |
-| Pretty Print Help Dialogue              |                    |
+| Command Categories to sort in Help View | :white_check_mark: |
+| Pretty Print Help Dialogue              | :white_check_mark: |
+| Pretty Print Queue                      |                    |
 | Alias Lists                             |                    |
