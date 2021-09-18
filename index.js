@@ -33,6 +33,7 @@ const queueHolder = {
 
 // Connection updates
 client.once('ready', () => {
+    client.user.setActivity('PTT', { type: 'PLAYING' });
     console.log('Ready!');
 });
 client.once('reconnecting', () => {
