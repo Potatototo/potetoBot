@@ -6,7 +6,7 @@
 | Pause / Resume Commands                 | :white_check_mark: |
 | Queue View Command                      | :white_check_mark: |
 | Now Playing Command                     | :white_check_mark: |
-| Queue Remove Command                    | Daniel             |
+| Queue Remove Command                    | :white_check_mark: |
 | PlayTop Command                         |                    |
 | Reimplement Volume Settings for new API |                    |
 | Ping Functionality                      | :white_check_mark: |
