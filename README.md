@@ -12,3 +12,4 @@
 | Ping Functionality                      | :white_check_mark: |
 | Command Categories to sort in Help View |                    |
 | Pretty Print Help Dialogue              |                    |
+| Alias Lists                             |                    |
