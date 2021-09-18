@@ -17,10 +17,20 @@ module.exports = {
 	async execute(message, args, queueHolder) {
 		const vc = message.member.voice.channel;
 		if (!vc) {
-			return message.channel.send('You need to be in a voice channel for this!');
+			const e = new MessageEmbed()
+				.setColor('#E6722E')
+				.setAuthor('potetoBot', 'https://i.imgur.com/8HzsYp9.png')
+		    	.addField('Error', 'You need to be in a voice channel for this!', false)
+				.setTimestamp();
+			return message.channel.send({ embeds: [e] });
 		}
 		if (!args[0]) {
-			return message.channel.send('You need to give me a link!');
+			const e = new MessageEmbed()
+				.setColor('#E6722E')
+				.setAuthor('potetoBot', 'https://i.imgur.com/8HzsYp9.png')
+		    	.addField('Error', 'You need to give me a link!', false)
+				.setTimestamp();
+			return message.channel.send({ embeds: [e] });
 		}
 
 		try {
@@ -79,7 +89,12 @@ module.exports = {
 			}
 
 		} catch (err) {
-			message.channel.send(`Oh no something went wrong :(\n${err}`);
+			const e = new MessageEmbed()
+				.setColor('#E6722E')
+				.setAuthor('potetoBot', 'https://i.imgur.com/8HzsYp9.png')
+		    	.addField('Error', `Oh no something went wrong :(\n${err}`, false)
+				.setTimestamp();
+			message.channel.send({ embeds: [e] });
 			console.error(err);
 		}
 	},

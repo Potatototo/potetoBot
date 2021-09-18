@@ -10,7 +10,14 @@ module.exports = {
 		songCount = queueHolder.songs.length;
 		if (args[0]) page = args[0];
 		if (page < 1) page = 1;
-		if (page * 10 > songCount + 10) return message.channel.send('Page does not exist!');
+		if (page * 10 > songCount + 10) {
+			const e = new MessageEmbed()
+				.setColor('#E6722E')
+				.setAuthor('potetoBot', 'https://i.imgur.com/8HzsYp9.png')
+		    	.addField('Error', 'Page does not exist!', false)
+				.setTimestamp();
+			return message.channel.send({ embeds: [e] });
+		}
 
 		const e = new MessageEmbed()
 			.setColor('#E6722E')

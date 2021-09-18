@@ -1,3 +1,5 @@
+const { MessageEmbed } = require('discord.js');
+
 module.exports = {
 	name: 'volume',
     alias: 'v',
@@ -8,6 +10,11 @@ module.exports = {
 		queueHolder.dispatcher.setVolumeLogarithmic(volume);
 		queueHolder.volume = volume;
 		console.log(`Set volume to ${volume}`);
-		message.channel.send(`Set volume to ${args[0]}!`);
+		const e = new MessageEmbed()
+			.setColor('#E6722E')
+			.setAuthor('potetoBot', 'https://i.imgur.com/8HzsYp9.png')
+		  	.addField('Volume', `Set to ${args[0]}!`, false)
+			.setTimestamp();
+		message.channel.send({ embeds: [e] });
 	},
 };
