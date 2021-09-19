@@ -41,7 +41,7 @@ module.exports = {
 				});
 				await entersState(connection, VoiceConnectionStatus.Ready, 5000);
 
-				queueHolder.subscription = createPlayerSub(connection);
+				queueHolder.subscription = this.createPlayerSub(connection);
 				console.log('Connection set');
 			}
 
