@@ -4,7 +4,9 @@ const { createAudioPlayer
 			, joinVoiceChannel
 			, AudioPlayerStatus
 			, VoiceConnectionStatus
-	} = require('@discordjs/voice')
+	} = require('@discordjs/voice');
+
+const { createPlayerSub } = require('./play')
 
 module.exports = {
 	name: 'join',
@@ -26,19 +28,9 @@ module.exports = {
 				guildId: vc.guild.id,
 				adapterCreator: vc.guild.voiceAdapterCreator
 			});
+
 			await entersState(connection, VoiceConnectionStatus.Ready, 5000);
-			player = createAudioPlayer();
-			player.on('stateChange', (oldState, newState) => {
-				if (newState.status === AudioPlayerStatus.Idle) {
-					console.log("finish");
-					if (queueHolder.songs.length > 0) {
-						nextSong = queueHolder.songs.shift();
-						queueHolder.currentSong = nextSong.title + ' - ' + nextSong.ownerChannelName;
-						this.play(nextSong.video_url, queueHolder);
-					}		
-				}
-			});
-			queueHolder.subscription = connection.subscribe(player);
+			queueHolder.subscription = createPlayerSub(connection);
 		} catch (err) {
 			console.log(err);
 		}

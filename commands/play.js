@@ -40,33 +40,21 @@ module.exports = {
 					adapterCreator: vc.guild.voiceAdapterCreator
 				});
 				await entersState(connection, VoiceConnectionStatus.Ready, 5000);
-				player = createAudioPlayer();
-				player.on('stateChange', (oldState, newState) => {
-					if (newState.status === AudioPlayerStatus.Idle) {
-						console.log("Song finished");
-						if (queueHolder.songs.length > 0) {
-							nextSong = queueHolder.song.shift();
-							queueHolder.currentSong = nextSong.title + ' - ' + nextSong.ownerChannelName;
-							this.play(nextSong.video_url, queueHolder);
-						} else {
-							queueHolder.currentSong = null;
-						}
-					}
-				});
-				queueHolder.subscription = connection.subscribe(player);
+
+				queueHolder.subscription = createPlayerSub(connection);
 				console.log('Connection set');
 			}
-			
+
 			let songInfo;
 			if (args[0].indexOf('http') === -1) {
 				const keystring = args.join(' ');
 				const search = await fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=${keystring}&key=AIzaSyBxWcgRWmI1p1ACOJsTSlIrsKwf7vn6X0A`)
-        			.then(response => response.json());	
+        			.then(response => response.json());
 				songInfo = await ytdl.getInfo(search.items[0].id.videoId);
 			} else {
 				songInfo = await ytdl.getInfo(args[0]);
 			}
-			
+
 
 			if (queueHolder.subscription.player.state.status === AudioPlayerStatus.Idle) {
 				this.play(songInfo.videoDetails.video_url, queueHolder);
@@ -93,6 +81,26 @@ module.exports = {
 			message.channel.send({ embeds: [e] });
 			console.error(err);
 		}
+	},
+
+	createPlayerSub(connection) {
+		player = createAudioPlayer();
+		player.on('stateChange', (oldState, newState) => {
+			if (newState.status === AudioPlayerStatus.Idle) {
+				console.log("Song finished");
+				if (queueHolder.songs.length > 0) {
+					nextSong = queueHolder.song.shift();
+					queueHolder.currentSong = nextSong.title + ' - ' + nextSong.ownerChannelName;
+					this.play(nextSong.video_url, queueHolder);
+				} else {
+					queueHolder.currentSong = null;
+				}
+			}
+		});
+		player.on ('error', (error) => {
+			console.log('Audio player error: ', error.message);
+		});
+		return connection.subscribe(player);
 	},
 
 	play(song, queueHolder) {
