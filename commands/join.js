@@ -30,7 +30,7 @@ module.exports = {
 			});
 
 			await entersState(connection, VoiceConnectionStatus.Ready, 5000);
-			queueHolder.subscription = createPlayerSub(connection);
+			queueHolder.subscription = createPlayerSub(connection, queueHolder);
 		} catch (err) {
 			console.log(err);
 		}
