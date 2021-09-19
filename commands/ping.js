@@ -1,5 +1,6 @@
 module.exports = {
 	name: 'ping',
+	alias: 'oing',
 	description: 'Pong!',
 	category: 'utility',
 	execute(message, args, queueHolder) {
