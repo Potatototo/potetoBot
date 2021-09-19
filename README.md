@@ -16,3 +16,4 @@
 | Alias Lists                             |                    |
 | Lyrics Command                          |                    |
 | Remove Deafened Symbol                  |                    |
+| Add progress bar                        |                    |
