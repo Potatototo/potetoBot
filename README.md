@@ -14,3 +14,6 @@
 | Pretty Print Help Dialogue              | :white_check_mark: |
 | Pretty Print Queue                      |                    |
 | Alias Lists                             |                    |
+| Lyrics Command                          |                    |
+| Remove Deafened Symbol                  |                    |
+| Add progress bar                        |                    |

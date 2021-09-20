@@ -41,7 +41,7 @@ module.exports = {
 				});
 				await entersState(connection, VoiceConnectionStatus.Ready, 5000);
 
-				queueHolder.subscription = this.createPlayerSub(connection);
+				queueHolder.subscription = this.createPlayerSub(connection, queueHolder);
 				console.log('Connection set');
 			}
 
@@ -83,13 +83,13 @@ module.exports = {
 		}
 	},
 
-	createPlayerSub(connection) {
+	createPlayerSub(connection, queueHolder) {
 		player = createAudioPlayer();
 		player.on('stateChange', (oldState, newState) => {
 			if (newState.status === AudioPlayerStatus.Idle) {
 				console.log("Song finished");
 				if (queueHolder.songs.length > 0) {
-					nextSong = queueHolder.song.shift();
+					nextSong = queueHolder.songs.shift();
 					queueHolder.currentSong = nextSong.title + ' - ' + nextSong.ownerChannelName;
 					this.play(nextSong.video_url, queueHolder);
 				} else {
