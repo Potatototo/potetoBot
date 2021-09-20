@@ -106,7 +106,9 @@ module.exports = {
 	play(song, queueHolder) {
 		const resource = createAudioResource(ytdl(song, {
 			filter: 'audioonly',
-			quality: 'lowestaudio'}));
+			quality: 'highestaudio',
+			highWaterMark: 1<<25
+		} ));
 
 		queueHolder.subscription.player.play(resource);
 	}
