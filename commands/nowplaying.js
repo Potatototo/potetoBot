@@ -14,7 +14,10 @@ module.exports = {
 			e.addField('\u200b', 'You need to be in a voice channel for this!', false)
 		}
 		if (queueHolder.currentSong) {
-			e.addField('Currently playing', queueHolder.currentSong, false);
+			songTitle = `${queueHolder.currentSong.title} - ${queueHolder.currentSong.ownerChannelName}`;
+			pbDuration = Math.floor(queueHolder.subscription.player.state.playbackDuration / 1000);
+
+			e.addField('Currently playing', songTitle/* + "\n" + pbDuration*/, false);
 		} else {
 			e.addField('\u200b', 'Nothing is playing at the moment.', false);
 		}

@@ -19,7 +19,7 @@ module.exports = {
 				const e = new MessageEmbed()
 					.setColor('#E6722E')
 					.setAuthor('potetoBot', 'https://i.imgur.com/8HzsYp9.png')
-		    		.addField('Skip', `${queueHolder.currentSong}`, false);
+		    		.addField('Skip', `${queueHolder.currentSong.title} - ${queueHolder.currentSong.ownerChannelName}`, false);
 				message.channel.send({ embeds: [e] });
 				queueHolder.subscription.player.stop();
 			} else {

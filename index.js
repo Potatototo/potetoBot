@@ -2,6 +2,7 @@ const Discord = require('discord.js');
 const {
 	prefix,
 	token,
+    ytkey,
 } = require('./config.json');
 const ytdl = require('ytdl-core');
 const fs = require('fs');

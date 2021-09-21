@@ -1,3 +1,8 @@
+const {
+	prefix,
+	token,
+    ytkey,
+} = require('../config.json');
 const { createAudioPlayer
 			, createAudioResource
 			, entersState
@@ -48,7 +53,7 @@ module.exports = {
 			let songInfo;
 			if (args[0].indexOf('http') === -1) {
 				const keystring = args.join(' ');
-				const search = await fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=${keystring}&key=AIzaSyBxWcgRWmI1p1ACOJsTSlIrsKwf7vn6X0A`)
+				const search = await fetch(`https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=${keystring}&key=${ytkey}`)
         			.then(response => response.json());
 				songInfo = await ytdl.getInfo(search.items[0].id.videoId);
 			} else {
@@ -58,7 +63,7 @@ module.exports = {
 
 			if (queueHolder.subscription.player.state.status === AudioPlayerStatus.Idle) {
 				this.play(songInfo.videoDetails.video_url, queueHolder);
-				queueHolder.currentSong = songInfo.videoDetails.title + ' - ' + songInfo.videoDetails.ownerChannelName;
+				queueHolder.currentSong = songInfo.videoDetails;
 				const e = new MessageEmbed()
 					.setColor('#E6722E')
 					.setAuthor('potetoBot', 'https://i.imgur.com/8HzsYp9.png')
@@ -90,7 +95,7 @@ module.exports = {
 				console.log("Song finished");
 				if (queueHolder.songs.length > 0) {
 					nextSong = queueHolder.songs.shift();
-					queueHolder.currentSong = nextSong.title + ' - ' + nextSong.ownerChannelName;
+					queueHolder.currentSong = nextSong;
 					this.play(nextSong.video_url, queueHolder);
 				} else {
 					queueHolder.currentSong = null;
