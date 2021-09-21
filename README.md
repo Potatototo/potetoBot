@@ -16,4 +16,5 @@
 | Alias Lists                             |                    |
 | Lyrics Command                          |                    |
 | Remove Deafened Symbol                  |                    |
-| Add progress bar                        |                    |
+| Add progress bar needs more YT API keys |                    |
+| Add age restricted video access         |                    |
