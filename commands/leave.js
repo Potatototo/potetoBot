@@ -1,5 +1,6 @@
 module.exports = {
 	name: 'leave',
+	alias: 'l',
 	description: 'Leave your voice channel.',
 	category: 'utility',
 	async execute(message, args, queueHolder) {
