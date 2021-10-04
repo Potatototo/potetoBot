@@ -10,6 +10,7 @@
     "npm": "^7.24.0",
     "prism-media": "^1.3.2",
     "tweetnacl": "^1.0.3",
-    "ytdl-core": "^4.5.0"
+    "ytdl-core": "^4.5.0",
+    "genius-lyrics": "^4.2.9"
   }
 }

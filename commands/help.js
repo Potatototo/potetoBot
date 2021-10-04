@@ -3,6 +3,7 @@ const { MessageEmbed } = require('discord.js');
 
 module.exports = {
 	name: 'help',
+	alias: 'h',
 	description: 'List all available commands.',
 	category: 'utility',
 	execute(message, args, queueHolder) {

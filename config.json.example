@@ -1,5 +1,6 @@
 {
     "prefix": "*prefix*",
-    "token": "*token*"
-    "ytkey": "*yt api key*"
+    "token": "*token*",
+    "ytkey": "*yt api key*",
+    "geniuskey": "*genius api key*"
 }

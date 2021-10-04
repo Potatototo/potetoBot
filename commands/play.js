@@ -2,6 +2,7 @@ const {
 	prefix,
 	token,
     ytkey,
+	geniuskey,
 } = require('../config.json');
 const { createAudioPlayer
 			, createAudioResource

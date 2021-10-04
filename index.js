@@ -3,6 +3,7 @@ const {
 	prefix,
 	token,
     ytkey,
+    geniuskey,
 } = require('./config.json');
 const ytdl = require('ytdl-core');
 const fs = require('fs');

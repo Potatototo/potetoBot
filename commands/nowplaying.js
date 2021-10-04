@@ -11,7 +11,8 @@ module.exports = {
 			.setColor('#E6722E')
 			.setAuthor('potetoBot', 'https://i.imgur.com/8HzsYp9.png')
 		if (!vc) {
-			e.addField('\u200b', 'You need to be in a voice channel for this!', false)
+			e.addField('\u200b', 'You need to be in a voice channel for this!', false);
+			return message.channel.send({ embeds: [e] });
 		}
 		if (queueHolder.currentSong) {
 			songTitle = `${queueHolder.currentSong.title} - ${queueHolder.currentSong.ownerChannelName}`;
