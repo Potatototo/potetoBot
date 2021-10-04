@@ -10,7 +10,6 @@ const Client = new Genius.Client(geniuskey);
 
 module.exports = {
 	name: 'lyrics',
-    alias: 'l',
 	description: 'Print the lyrics of current song!',
 	category: 'utility',
 	async execute(message, args, queueHolder) {
