@@ -38,6 +38,7 @@ module.exports = {
 		}
 
 		try {
+			// connect
 			if (!queueHolder.subscription) {
 				connection = joinVoiceChannel({
 					channelId: vc.id,
@@ -50,6 +51,7 @@ module.exports = {
 				console.log('Connection set');
 			}
 
+			// get song info
 			let songInfo;
 			if (args[0].indexOf('http') === -1) {
 				const keystring = args.join(' ');
@@ -60,23 +62,20 @@ module.exports = {
 				songInfo = await ytdl.getInfo(args[0]);
 			}
 
-
+			// add song to queue or play
+			const e = new MessageEmbed()
+					.setColor('#E6722E')
+					.setAuthor('potetoBot', 'https://i.imgur.com/8HzsYp9.png');
 			if (queueHolder.subscription.player.state.status === AudioPlayerStatus.Idle) {
 				this.play(songInfo.videoDetails.video_url, queueHolder);
 				queueHolder.currentSong = songInfo.videoDetails;
-				const e = new MessageEmbed()
-					.setColor('#E6722E')
-					.setAuthor('potetoBot', 'https://i.imgur.com/8HzsYp9.png')
-					.addField('Now playing', songInfo.videoDetails.title + ' - ' + songInfo.videoDetails.ownerChannelName, false);
-				message.channel.send({ embeds: [e] });
+				e.addField('Now playing', songInfo.videoDetails.title + ' - ' + songInfo.videoDetails.ownerChannelName, false);
+				
 			} else {
 				queueHolder.songs.push(songInfo.videoDetails);
-				const e = new MessageEmbed()
-					.setColor('#E6722E')
-					.setAuthor('potetoBot', 'https://i.imgur.com/8HzsYp9.png')
-					.addField('Added to Queue', songInfo.videoDetails.title + ' - ' + songInfo.videoDetails.ownerChannelName, false);
-				message.channel.send({ embeds: [e] });
+				e.addField('Added to Queue', songInfo.videoDetails.title + ' - ' + songInfo.videoDetails.ownerChannelName, false);
 			}
+			message.channel.send({ embeds: [e] });
 
 		} catch (err) {
 			const e = new MessageEmbed()
@@ -114,7 +113,6 @@ module.exports = {
 			quality: 'highestaudio',
 			highWaterMark: 1<<25
 		} ));
-
 		queueHolder.subscription.player.play(resource);
 	}
 };
