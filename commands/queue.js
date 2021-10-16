@@ -24,7 +24,7 @@ module.exports = {
 			.setColor('#E6722E')
 			.setAuthor('potetoBot Queue', 'https://i.imgur.com/8HzsYp9.png')
 
-		for (let i = (page - 1) * 10; i < (page - 1) * 5 + 10; i++) {
+		for (let i = (page - 1) * 10; i < (page - 1) * 10 + 10; i++) {
 			if (i < songCount) {
 				e.addField('\u200b', i + 1 + '. ' + queueHolder.songs[i].title + ' - ' + queueHolder.songs[i].ownerChannelName, false);
 			}
