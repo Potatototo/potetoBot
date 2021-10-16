@@ -15,10 +15,16 @@ module.exports = {
         }
         const player = queueHolder.subscription.player;
 
+        const e = new MessageEmbed()
+            .setColor('#E6722E')
+			.setAuthor('potetoBot', 'https://i.imgur.com/8HzsYp9.png');
         if (player.state.status === AudioPlayerStatus.Paused) {
             player.unpause();
+            e.addField('Unpausing', `${queueHolder.currentSong.title} - ${queueHolder.currentSong.ownerChannelName}`, false);
         } else {
             player.pause();
+            e.addField('Pausing', `${queueHolder.currentSong.title} - ${queueHolder.currentSong.ownerChannelName}`, false);
         }
+		message.channel.send({ embeds: [e] });
     }
 }
