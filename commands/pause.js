@@ -3,6 +3,7 @@ const { MessageEmbed } = require('discord.js');
 
 module.exports = {
     name: 'pause',
+    alias: 't',
     description: 'Pauses or resumes the currently playing song.',
     category: 'music',
     async execute(message, args, queueHolder) {
