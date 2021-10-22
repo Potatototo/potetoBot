@@ -22,9 +22,11 @@ module.exports = {
         if (player.state.status === AudioPlayerStatus.Paused) {
             player.unpause();
             e.addField('Unpausing', `${queueHolder.currentSong.title} - ${queueHolder.currentSong.ownerChannelName}`, false);
-        } else {
+        } else if (player.state.status === AudioPlayerStatus.Playing) {
             player.pause();
             e.addField('Pausing', `${queueHolder.currentSong.title} - ${queueHolder.currentSong.ownerChannelName}`, false);
+        }  else if (player.state.status === AudioPlayerStatus.Idle) {
+            e.addField('Error', 'There\'s nothing to pause!', false);
         }
 		message.channel.send({ embeds: [e] });
     }
