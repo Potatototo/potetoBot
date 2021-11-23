@@ -12,8 +12,8 @@
 | Ping Functionality                      | :white_check_mark: |
 | Command Categories to sort in Help View | :white_check_mark: |
 | Pretty Print Help Dialogue              | :white_check_mark: |
-| Pretty Print Queue                      |                    |
+| Pretty Print Queue                      | :white_check_mark: |
 | Alias Lists                             |                    |
-| Lyrics Command                          |                    |
+| Lyrics Command                          | :white_check_mark: |
 | Remove Deafened Symbol                  |                    |
 | Add progress bar needs more YT API keys |                    |
