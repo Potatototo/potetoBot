@@ -35,7 +35,7 @@ const queueHolder = {
 
 // Connection updates
 client.once('ready', () => {
-    client.user.setActivity('PTT', { type: 'PLAYING' });
+    client.user.setActivity('Basti Songs', { type: 'PLAYING' });
     console.log('Ready!');
 });
 client.once('reconnecting', () => {
