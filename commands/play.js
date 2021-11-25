@@ -71,7 +71,7 @@ module.exports = {
 				this.play(songInfo.videoDetails.video_url, queueHolder);
 				queueHolder.currentSong = songInfo.videoDetails;
 				e.addField('Now playing', songInfo.videoDetails.title + ' - ' + songInfo.videoDetails.ownerChannelName, false);
-				
+				queueHolder.client.user.setActivity(queueHolder.currentSong.title, { type: 'PLAYING' });
 			} else {
 				queueHolder.songs.push(songInfo.videoDetails);
 				e.addField('Added to Queue', songInfo.videoDetails.title + ' - ' + songInfo.videoDetails.ownerChannelName, false);
@@ -96,9 +96,11 @@ module.exports = {
 				if (queueHolder.songs.length > 0) {
 					nextSong = queueHolder.songs.shift();
 					queueHolder.currentSong = nextSong;
+					queueHolder.client.user.setActivity(nextSong.title, { type: 'PLAYING' });
 					this.play(nextSong.video_url, queueHolder);
 				} else {
 					queueHolder.currentSong = null;
+					queueHolder.client.user.setActivity('you', { type: 'WATCHING' });
 				}
 			}
 		});
