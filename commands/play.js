@@ -44,7 +44,8 @@ module.exports = {
 				connection = joinVoiceChannel({
 					channelId: vc.id,
 					guildId: vc.guild.id,
-					adapterCreator: vc.guild.voiceAdapterCreator
+					adapterCreator: vc.guild.voiceAdapterCreator,
+					selfDeaf: false
 				});
 				await entersState(connection, VoiceConnectionStatus.Ready, 5000);
 
