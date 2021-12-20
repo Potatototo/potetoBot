@@ -3,6 +3,7 @@ const {
 	token,
     ytkey,
 	geniuskey,
+    mongopw,
 } = require('../config.json');
 const { MessageEmbed } = require('discord.js');
 const Genius = require("genius-lyrics");

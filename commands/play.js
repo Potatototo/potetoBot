@@ -3,7 +3,9 @@ const {
 	token,
     ytkey,
 	geniuskey,
+	mongopw,
 } = require('../config.json');
+
 const { createAudioPlayer
 			, createAudioResource
 			, entersState
@@ -11,6 +13,7 @@ const { createAudioPlayer
 			, AudioPlayerStatus
 			, VoiceConnectionStatus
 	} = require('@discordjs/voice');
+
 const ytdl = require('ytdl-core');
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));;
 const { MessageEmbed } = require('discord.js');
@@ -63,6 +66,27 @@ module.exports = {
 			} else {
 				songInfo = await ytdl.getInfo(args[0]);
 			}
+
+			// log play in DB
+			await queueHolder.mongoClient.connect();
+			const collection = queueHolder.mongoClient.db("potetobot").collection("stats");
+			
+			const query = {	title: songInfo.videoDetails.title,
+							artist: songInfo.videoDetails.ownerChannelName}
+			const queryResult = await collection.distinct("count", query)
+			songCount = queryResult.length == 0 ? 0 : queryResult[0]
+			
+			// insert new entry or update if already
+			const dbSong = {
+				title: songInfo.videoDetails.title,
+				artist: songInfo.videoDetails.ownerChannelName,
+				count: songCount + 1
+			}
+			const options = { upsert: true };
+
+			const dbResult = await collection.replaceOne(query, dbSong, options);
+			
+			queueHolder.mongoClient.close();
 
 			// add song to queue or play
 			const e = new MessageEmbed()
