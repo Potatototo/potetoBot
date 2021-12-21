@@ -16,4 +16,4 @@
 | Alias Lists                             |                    |
 | Lyrics Command                          | :white_check_mark: |
 | Remove Deafened Symbol                  | :white_check_mark: |
-| Add progress bar needs more YT API keys |                    |
+| Add progress bar                        |                    |
