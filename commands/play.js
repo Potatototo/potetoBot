@@ -83,7 +83,7 @@ module.exports = {
 			message.channel.send({ embeds: [e] });
 
 			// log in db
-			await this.dbLog(songInfo, queueHolder)
+			this.dbLog(songInfo, queueHolder)
 
 		} catch (err) {
 			const e = new MessageEmbed()

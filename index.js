@@ -66,8 +66,8 @@ client.on('messageCreate', async message => {
     // command execution
 	try {
         command.execute(message, args, queueHolder);
-    } catch (error) {
-        console.error(error);
+    } catch (err) {
+        console.error(err);
         message.reply('there was an error trying to execute that command!');
     }
 })
