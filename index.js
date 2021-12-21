@@ -4,11 +4,16 @@ const {
 	token,
     ytkey,
     geniuskey,
+    mongopw,
 } = require('./config.json');
 const ytdl = require('ytdl-core');
 const fs = require('fs');
+const { MongoClient } = require('mongodb');
 
 const client = new Discord.Client({ intents: [Discord.Intents.FLAGS.GUILDS, Discord.Intents.FLAGS.GUILD_MESSAGES, Discord.Intents.FLAGS.GUILD_VOICE_STATES] });
+
+const mongoUri = `mongodb+srv://potetobot:${mongopw}@potetobot-stats.zbsxt.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
+const mongoClient = new MongoClient(mongoUri, { useNewUrlParser: true, useUnifiedTopology: true });
 
 // load commands
 client.commands = new Discord.Collection();
@@ -28,6 +33,7 @@ const queueHolder = {
     textChannel: null,
     subscription: null,
     client: client,
+    mongoClient: mongoClient,
     songs: [], // videoDetails objects
     currentSong: null,
     volume: 0.2

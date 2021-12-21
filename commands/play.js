@@ -3,7 +3,9 @@ const {
 	token,
     ytkey,
 	geniuskey,
+	mongopw,
 } = require('../config.json');
+
 const { createAudioPlayer
 			, createAudioResource
 			, entersState
@@ -11,6 +13,7 @@ const { createAudioPlayer
 			, AudioPlayerStatus
 			, VoiceConnectionStatus
 	} = require('@discordjs/voice');
+
 const ytdl = require('ytdl-core');
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));;
 const { MessageEmbed } = require('discord.js');
@@ -79,6 +82,9 @@ module.exports = {
 			}
 			message.channel.send({ embeds: [e] });
 
+			// log in db
+			await this.dbLog(songInfo, queueHolder)
+
 		} catch (err) {
 			const e = new MessageEmbed()
 				.setColor('#E6722E')
@@ -118,5 +124,35 @@ module.exports = {
 			highWaterMark: 1<<25
 		} ));
 		queueHolder.subscription.player.play(resource);
+	},
+
+	async dbLog(songInfo, queueHolder) {
+		try {
+			// log play in DB
+			await queueHolder.mongoClient.connect();
+			const collection = queueHolder.mongoClient.db("potetobot").collection("stats");
+			
+			// get existing DB entry
+			const query = {	title: songInfo.videoDetails.title,
+							artist: songInfo.videoDetails.ownerChannelName}
+			const playQueryResult = await collection.distinct("playCount", query)
+			const playCount = playQueryResult.length == 0 ? 0 : playQueryResult[0]
+			const skipQueryResult = await collection.distinct("skipCount", query)
+			const skipCount = skipQueryResult.length == 0 ? 0 : skipQueryResult[0]
+
+			// update with new play count
+			const dbSong = {
+				title: songInfo.videoDetails.title,
+				artist: songInfo.videoDetails.ownerChannelName,
+				playCount: playCount + 1,
+				skipCount: skipCount,
+				songLength: songInfo.videoDetails.lengthSeconds
+			}
+			const options = { upsert: true };
+
+			const dbResult = await collection.replaceOne(query, dbSong, options);
+		} finally {
+			queueHolder.mongoClient.close();
+		}
 	}
 };

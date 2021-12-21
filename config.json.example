@@ -2,5 +2,6 @@
     "prefix": "*prefix*",
     "token": "*token*",
     "ytkey": "*yt api key*",
-    "geniuskey": "*genius api key*"
+    "geniuskey": "*genius api key*",
+    "mongopw": "*pw to mongodb*"
 }
