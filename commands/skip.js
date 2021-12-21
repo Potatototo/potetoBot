@@ -43,18 +43,18 @@ module.exports = {
 			
 			// get existing DB entry
 			const query = {
-				title: songInfo.videoDetails.title,
-				artist: songInfo.videoDetails.ownerChannelName
+				title: songInfo.title,
+				artist: songInfo.ownerChannelName
 			};
 			const findResult = await collection.findOne(query);
 
 			// update with new play count
 			const dbSong = {
-				title: songInfo.videoDetails.title,
-				artist: songInfo.videoDetails.ownerChannelName,
+				title: songInfo.title,
+				artist: songInfo.ownerChannelName,
 				playCount: findResult == null ? 1 : findResult.playCount,
 				skipCount: findResult == null ? 0 :findResult.skipCount + 1,
-				songLength: songInfo.videoDetails.lengthSeconds
+				songLength: songInfo.lengthSeconds
 			}
 			const options = { upsert: true };
 
