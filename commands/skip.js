@@ -42,20 +42,19 @@ module.exports = {
 			const collection = queueHolder.mongoClient.db("potetobot").collection("stats");
 			
 			// get existing DB entry
-			const query = {	title: songInfo.title,
-							artist: songInfo.ownerChannelName}
-			const playQueryResult = await collection.distinct("playCount", query)
-			const playCount = playQueryResult.length == 0 ? 0 : playQueryResult[0]
-			const skipQueryResult = await collection.distinct("skipCount", query)
-			const skipCount = skipQueryResult.length == 0 ? 0 : skipQueryResult[0]
+			const query = {
+				title: songInfo.videoDetails.title,
+				artist: songInfo.videoDetails.ownerChannelName
+			};
+			const findResult = await collection.findOne(query);
 
 			// update with new play count
 			const dbSong = {
-				title: songInfo.title,
-				artist: songInfo.ownerChannelName,
-				playCount: playCount,
-				skipCount: skipCount + 1,
-				songLength: songInfo.lengthSeconds
+				title: songInfo.videoDetails.title,
+				artist: songInfo.videoDetails.ownerChannelName,
+				playCount: findResult == null ? 1 : findResult.playCount,
+				skipCount: findResult == null ? 0 :findResult.skipCount + 1,
+				songLength: songInfo.videoDetails.lengthSeconds
 			}
 			const options = { upsert: true };
 
