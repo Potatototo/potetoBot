@@ -83,7 +83,7 @@ module.exports = {
 			message.channel.send({ embeds: [e] });
 
 			// log in db
-			this.dbLog(songInfo, queueHolder)
+			this.dbLog(songInfo, message.author.username, queueHolder)
 
 		} catch (err) {
 			const e = new MessageEmbed()
@@ -126,7 +126,7 @@ module.exports = {
 		queueHolder.subscription.player.play(resource);
 	},
 
-	async dbLog(songInfo, queueHolder) {
+	async dbLog(songInfo, username, queueHolder) {
 		try {
 			// log play in DB
 			await queueHolder.mongoClient.connect();
@@ -139,13 +139,21 @@ module.exports = {
 			};
 			const findResult = await collection.findOne(query);
 
+			let userPlayCount = findResult == null ? {} : findResult.userPlayCount
+			if (userPlayCount == null || Object.keys(userPlayCount).length == 0) {
+				userPlayCount[username] = 1
+			} else {
+				userPlayCount[username] = username in userPlayCount ? userPlayCount[username] + 1 : 1
+			}
+
 			// update with new play count
 			const dbSong = {
 				title: songInfo.videoDetails.title,
 				artist: songInfo.videoDetails.ownerChannelName,
 				playCount: findResult == null ? 1 : findResult.playCount + 1,
-				skipCount: findResult == null ? 0 :findResult.skipCount,
-				songLength: songInfo.videoDetails.lengthSeconds
+				skipCount: findResult == null ? 0 : findResult.skipCount,
+				userPlayCount: userPlayCount,
+				songLength: parseInt(songInfo.videoDetails.lengthSeconds)
 			}
 			const options = { upsert: true };
 

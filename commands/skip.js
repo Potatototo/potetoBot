@@ -48,13 +48,14 @@ module.exports = {
 			};
 			const findResult = await collection.findOne(query);
 
-			// update with new play count
+			// update with new skip count
 			const dbSong = {
 				title: songInfo.title,
 				artist: songInfo.ownerChannelName,
 				playCount: findResult == null ? 1 : findResult.playCount,
-				skipCount: findResult == null ? 0 :findResult.skipCount + 1,
-				songLength: songInfo.lengthSeconds
+				skipCount: findResult == null ? 0 : findResult.skipCount + 1,
+				userPlayCount : findResult == null ? {} : findResult.userPlayCount,
+				songLength: parseInt(songInfo.lengthSeconds)
 			}
 			const options = { upsert: true };
 
