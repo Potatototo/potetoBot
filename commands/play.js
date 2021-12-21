@@ -67,27 +67,6 @@ module.exports = {
 				songInfo = await ytdl.getInfo(args[0]);
 			}
 
-			// log play in DB
-			await queueHolder.mongoClient.connect();
-			const collection = queueHolder.mongoClient.db("potetobot").collection("stats");
-			
-			const query = {	title: songInfo.videoDetails.title,
-							artist: songInfo.videoDetails.ownerChannelName}
-			const queryResult = await collection.distinct("count", query)
-			songCount = queryResult.length == 0 ? 0 : queryResult[0]
-			
-			// insert new entry or update if already
-			const dbSong = {
-				title: songInfo.videoDetails.title,
-				artist: songInfo.videoDetails.ownerChannelName,
-				count: songCount + 1
-			}
-			const options = { upsert: true };
-
-			const dbResult = await collection.replaceOne(query, dbSong, options);
-			
-			queueHolder.mongoClient.close();
-
 			// add song to queue or play
 			const e = new MessageEmbed()
 					.setColor('#E6722E')
@@ -102,6 +81,9 @@ module.exports = {
 				e.addField('Added to Queue', songInfo.videoDetails.title + ' - ' + songInfo.videoDetails.ownerChannelName, false);
 			}
 			message.channel.send({ embeds: [e] });
+
+			// log in db
+			await this.dbLog(songInfo, queueHolder)
 
 		} catch (err) {
 			const e = new MessageEmbed()
@@ -142,5 +124,35 @@ module.exports = {
 			highWaterMark: 1<<25
 		} ));
 		queueHolder.subscription.player.play(resource);
+	},
+
+	async dbLog(songInfo, queueHolder) {
+		try {
+			// log play in DB
+			await queueHolder.mongoClient.connect();
+			const collection = queueHolder.mongoClient.db("potetobot").collection("stats");
+			
+			// get existing DB entry
+			const query = {	title: songInfo.videoDetails.title,
+							artist: songInfo.videoDetails.ownerChannelName}
+			const playQueryResult = await collection.distinct("playCount", query)
+			const playCount = playQueryResult.length == 0 ? 0 : playQueryResult[0]
+			const skipQueryResult = await collection.distinct("skipCount", query)
+			const skipCount = skipQueryResult.length == 0 ? 0 : skipQueryResult[0]
+
+			// update with new play count
+			const dbSong = {
+				title: songInfo.videoDetails.title,
+				artist: songInfo.videoDetails.ownerChannelName,
+				playCount: playCount + 1,
+				skipCount: skipCount,
+				songLength: songInfo.videoDetails.lengthSeconds
+			}
+			const options = { upsert: true };
+
+			const dbResult = await collection.replaceOne(query, dbSong, options);
+		} finally {
+			queueHolder.mongoClient.close();
+		}
 	}
 };
