@@ -27,7 +27,7 @@ for (const file of commandFiles) {
     }
 }
 
-// setup state holder with queue, volume, voice channel, text channel
+// setup state holder with queue, voice channel, text channel
 const queueHolder = {
     prefix: prefix,
     textChannel: null,
@@ -36,7 +36,6 @@ const queueHolder = {
     mongoClient: mongoClient,
     songs: [], // videoDetails objects
     currentSong: null,
-    volume: 0.2
 };
 
 // Connection updates

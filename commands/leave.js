@@ -11,7 +11,6 @@ module.exports = {
     		queueHolder.subscription = null;
     		queueHolder.songs = [];
     		queueHolder.currentSong = null;
-    		queueHolder.volume = 0.2;
 		} catch (err) {
 			console.log(err);
 		}
