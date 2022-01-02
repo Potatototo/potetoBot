@@ -16,4 +16,4 @@
 | Alias Lists                             |                    |
 | Lyrics Command                          | :white_check_mark: |
 | Remove Deafened Symbol                  | :white_check_mark: |
-| Add progress bar                        |                    |
+| Add progress bar                        | :white_check_mark: |
