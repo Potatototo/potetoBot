@@ -1,4 +1,5 @@
 const { MessageEmbed } = require('discord.js');
+const { fancyTimeFormat } = require('./nowplaying')
 
 module.exports = {
 	name: 'queue',
@@ -29,7 +30,13 @@ module.exports = {
 				e.addField('\u200b', i + 1 + '. ' + queueHolder.songs[i].title + ' - ' + queueHolder.songs[i].ownerChannelName, false);
 			}
 		}
-		e.setFooter('Page ' + page + '/' + Math.ceil(Math.max(1, songCount / 10)));
+		
+		queueDuration = queueHolder.currentSong ? parseInt(queueHolder.currentSong.lengthSeconds) - ~~(queueHolder.subscription.player.state.playbackDuration / 1000) : 0
+		for (let i = 0; i < queueHolder.songs.length; i++) {
+			queueDuration += queueHolder.songs[i].lengthSeconds
+		}
+
+		e.setFooter(`Page ${page}/${Math.ceil(Math.max(1, songCount / 10))} - ${fancyTimeFormat(queueDuration)}`);
 
 		message.channel.send({ embeds: [e] });
 	},
