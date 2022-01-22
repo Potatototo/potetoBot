@@ -1,4 +1,4 @@
-FROM node:16.9.1
+FROM node:17.4.0
 
 WORKDIR /app
 
@@ -11,4 +11,4 @@ RUN npm ci
 
 COPY . .
 
-CMD [ "node", "index.js" ]
+CMD [ "npm", "run", "start" ]

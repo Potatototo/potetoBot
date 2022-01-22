@@ -1,0 +1,7 @@
+{
+  "prefix": "*prefix*",
+  "token": "*token*",
+  "yt": "*yt api key*",
+  "genius": "*genius api key*",
+  "mongo": "*mongoUri with PW*"
+}
