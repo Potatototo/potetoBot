@@ -25,4 +25,11 @@ export async function connectDiscord(client: Client, vc: VoiceBasedChannel) {
     client.subscription = sub;
     console.log("Setting connection");
   }
+
+  const intervalId = setInterval(function () {
+    if (Array.from(vc.members.keys()).length <= 1) {
+      connection.destroy();
+      clearInterval(intervalId);
+    }
+  }, 5 * 60 * 1000);
 }
