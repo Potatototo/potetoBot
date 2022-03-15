@@ -15,7 +15,7 @@
 | Command Categories to sort in Help View | :white_check_mark: |
 | Pretty Print Help Dialogue              | :white_check_mark: |
 | Pretty Print Queue                      | :white_check_mark: |
-| Alias Lists                             |                    |
+| Alias Lists                             | :white_check_mark: |
 | Lyrics Command                          | :white_check_mark: |
 | Remove Deafened Symbol                  | :white_check_mark: |
 | Add progress bar                        | :white_check_mark: |
