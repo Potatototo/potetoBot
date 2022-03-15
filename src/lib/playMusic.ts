@@ -25,20 +25,18 @@ export function createPlayerSubscription(
   connection: VoiceConnection
 ): PlayerSubscription | undefined {
   const player: AudioPlayer = createAudioPlayer();
-  player.on("stateChange", (oldState, newState) => {
-    if (newState.status === AudioPlayerStatus.Idle) {
-      console.log(`Fisnished: ${client.currentSong?.title}`);
-      if (client.songs.length > 0) {
-        const nextSong = client.songs.shift() as MoreVideoDetails;
-        client.currentSong = nextSong;
-        client.user?.setActivity(nextSong.title, {
-          type: "PLAYING",
-        });
-        play(client, nextSong.video_url);
-      } else {
-        client.currentSong = null;
-        client.user?.setActivity("you", { type: "WATCHING" });
-      }
+  player.on(AudioPlayerStatus.Idle, () => {
+    console.log(`Fisnished: ${client.currentSong?.title}`);
+    if (client.songs.length > 0) {
+      const nextSong = client.songs.shift() as MoreVideoDetails;
+      client.currentSong = nextSong;
+      client.user?.setActivity(nextSong.title, {
+        type: "PLAYING",
+      });
+      play(client, nextSong.video_url);
+    } else {
+      client.currentSong = null;
+      client.user?.setActivity("you", { type: "WATCHING" });
     }
   });
   player.on("error", (error) => {
