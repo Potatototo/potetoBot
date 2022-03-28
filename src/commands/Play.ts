@@ -58,7 +58,7 @@ export default class PlayCommand extends Command {
               type: "PLAYING",
             }
           );
-          this.client.db?.log(song, message.author.username, LogType.PLAY);
+          // this.client.db?.log(song, message.author.username, LogType.PLAY);
           if (songInfos.length > 0) {
             this.sendEmbed(message.channel, "Now Playing", song.title);
           } else {
