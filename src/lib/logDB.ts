@@ -70,4 +70,45 @@ export class DBLogger {
       this.mongoClient?.close();
     }
   }
+
+  public async logPlaylist(songInfos: MoreVideoDetails[], username: string) {
+    await this.mongoClient?.connect();
+    const collection = this.mongoClient?.db("potetobot").collection("stats");
+
+    const promises: Promise<UpdateResult>[] = [];
+    for (const songInfo of songInfos) {
+      const query = {
+        title: songInfo.title,
+        artist: songInfo.ownerChannelName,
+      };
+      const findResult = collection ? await collection.findOne(query) : null;
+
+      const userPlayCount = findResult === null ? {} : findResult.userPlayCount;
+      if (userPlayCount === null || Object.keys(userPlayCount).length === 0) {
+        userPlayCount[username] = 1;
+      } else {
+        userPlayCount[username] =
+          username in userPlayCount ? userPlayCount[username] + 1 : 1;
+      }
+
+      // update with new play count
+      const dbSong = {
+        title: songInfo.title,
+        artist: songInfo.ownerChannelName,
+        playCount: findResult === null ? 1 : findResult.playCount + 1,
+        skipCount: findResult === null ? 0 : findResult.skipCount,
+        userPlayCount: userPlayCount,
+        songLength: parseInt(songInfo.lengthSeconds),
+      };
+      const options: ReplaceOptions = { upsert: true };
+
+      promises.push(
+        collection?.replaceOne(query, dbSong, options) as Promise<UpdateResult>
+      );
+
+      Promise.allSettled(promises).then(() => {
+        this.mongoClient?.close();
+      });
+    }
+  }
 }

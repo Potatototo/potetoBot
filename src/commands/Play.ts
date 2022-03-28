@@ -67,10 +67,8 @@ export default class PlayCommand extends Command {
         }
       }
 
-      for (const s of songInfos) {
-        this.client.songs.push(s);
-        this.client.db?.log(s, message.author.username, LogType.PLAY);
-      }
+      this.client.songs.concat(songInfos);
+      this.client.db?.logPlaylist(songInfos, message.author.username);
 
       if (songInfos.length > 0) {
         return this.sendEmbed(
