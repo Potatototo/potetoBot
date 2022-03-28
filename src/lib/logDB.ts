@@ -105,10 +105,9 @@ export class DBLogger {
       promises.push(
         collection?.replaceOne(query, dbSong, options) as Promise<UpdateResult>
       );
-
-      Promise.allSettled(promises).then(() => {
-        this.mongoClient?.close();
-      });
     }
+    Promise.allSettled(promises).then(() => {
+      this.mongoClient?.close();
+    });
   }
 }

@@ -2,7 +2,6 @@ import { Message, VoiceBasedChannel } from "discord.js";
 import { Command } from "../types/Command";
 import { CommandCategory } from "../types/CommandCategory";
 import { play } from "../lib/playMusic";
-import { LogType } from "../types/LogType";
 import { connectDiscord } from "../lib/joinChannel";
 import { search } from "../lib/ytSearch";
 import { MoreVideoDetails } from "ytdl-core";
