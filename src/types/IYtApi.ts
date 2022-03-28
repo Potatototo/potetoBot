@@ -40,6 +40,10 @@ export interface YTVideo {
       description: string;
     };
     defaultAudioLanguage: string;
+    resourceId: {
+      kind: string;
+      videoId: string;
+    };
   };
   contentDetails: {
     duration: string;

@@ -1,14 +1,11 @@
-import config from "../config.json";
-import ytdl, { MoreVideoDetails } from "ytdl-core";
 import { Message, VoiceBasedChannel } from "discord.js";
-import { AudioPlayerStatus } from "@discordjs/voice";
 import { Command } from "../types/Command";
 import { CommandCategory } from "../types/CommandCategory";
-import { YTRes } from "../types/IYtApi";
 import { play } from "../lib/playMusic";
-import fetch from "node-fetch";
 import { LogType } from "../types/LogType";
 import { connectDiscord } from "../lib/joinChannel";
+import { search } from "../lib/ytSearch";
+import { MoreVideoDetails } from "ytdl-core";
 
 export default class PlayCommand extends Command {
   name = "play";
@@ -40,40 +37,53 @@ export default class PlayCommand extends Command {
         await connectDiscord(this.client, vc);
       }
       // get song info
-      let songInfo: MoreVideoDetails;
-      if (args[0].indexOf("http") === -1) {
-        const keystring: string = args.join(" ");
-        const search: YTRes = (await fetch(
-          `https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=${keystring}&key=${config.yt}`
-        ).then((response) => response.json())) as YTRes;
-        songInfo = (await ytdl.getInfo(search.items[0].id.videoId))
-          .videoDetails;
-      } else {
-        songInfo = (await ytdl.getInfo(args[0])).videoDetails;
+      const songInfos = await search(args.join(" "));
+
+      if (songInfos.length === 0) {
+        return this.sendEmbed(
+          message.channel,
+          "Error",
+          "Coulnd't find that song"
+        );
       }
 
-      // add song to queue or play
-      let embedTitle: string;
-      if (
-        this.client.subscription?.player.state.status === AudioPlayerStatus.Idle
-      ) {
-        play(this.client, songInfo.video_url);
-        this.client.currentSong = songInfo;
-        embedTitle = "Now Playing";
-        this.client.user?.setActivity(
-          this.client.currentSong?.title as string,
-          {
-            type: "PLAYING",
+      if (!this.client.currentSong) {
+        const song = songInfos.shift() as MoreVideoDetails;
+        if (!this.client.currentSong) {
+          play(this.client, song.video_url);
+          this.client.currentSong = song;
+          this.client.user?.setActivity(
+            this.client.currentSong?.title as string,
+            {
+              type: "PLAYING",
+            }
+          );
+          this.client.db?.log(song, message.author.username, LogType.PLAY);
+          if (songInfos.length > 0) {
+            this.sendEmbed(message.channel, "Now Playing", song.title);
+          } else {
+            return this.sendEmbed(message.channel, "Now Playing", song.title);
           }
-        );
-      } else {
-        this.client.songs.push(songInfo);
-        embedTitle = "Added to Queue";
+        }
       }
-      // log in db
-      this.client.db?.log(songInfo, message.author.username, LogType.PLAY);
-      console.log(`${embedTitle}: ${songInfo.title}`);
-      return this.sendEmbed(message.channel, embedTitle, songInfo.title);
+
+      for (const s of songInfos) {
+        this.client.songs.push(s);
+        this.client.db?.log(s, message.author.username, LogType.PLAY);
+      }
+
+      if (songInfos.length > 0) {
+        return this.sendEmbed(
+          message.channel,
+          "Added to Queue",
+          `${songInfos.length} songs`
+        );
+      }
+      return this.sendEmbed(
+        message.channel,
+        "Error",
+        "How did we even get here?"
+      );
     } catch (err) {
       console.error(err);
       return this.sendEmbed(
