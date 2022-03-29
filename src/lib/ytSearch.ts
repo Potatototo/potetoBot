@@ -1,7 +1,7 @@
 import fetch from "node-fetch";
 import config from "../config.json";
 import ytdl, { MoreVideoDetails, videoInfo } from "ytdl-core";
-import { YTRes } from "../types/IYtApi";
+import { YTRes, YTVideo } from "../types/IYtApi";
 
 export async function search(keyword: string): Promise<MoreVideoDetails[]> {
   if (keyword.includes("list=")) return playlistSearch(keyword);
@@ -35,13 +35,24 @@ async function playlistSearch(keyword: string): Promise<MoreVideoDetails[]> {
   for (const s of keyword.split(/[&?]/)) {
     if (s.includes("list=")) playlistId = s.substring(5);
   }
-  const search: YTRes = await fetch(
+  let search: YTRes = await fetch(
     `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistId}&key=${config.yt}`
   ).then((response) => response.json());
 
+  let videoIds: YTVideo[] = search.items;
+  let count = videoIds.length;
+
+  while (count < search.pageInfo.totalResults) {
+    search = await fetch(
+      `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistId}&pageToken=${search.nextPageToken}&key=${config.yt}`
+    ).then((response) => response.json());
+    videoIds = videoIds.concat(search.items);
+    count += search.items.length;
+  }
+
   const songInfos: MoreVideoDetails[] = [];
   const promises: Promise<videoInfo>[] = [];
-  for (const v of search.items) {
+  for (const v of videoIds) {
     try {
       promises.push(ytdl.getInfo(v.snippet.resourceId.videoId));
     } catch {}
