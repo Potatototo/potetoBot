@@ -5,6 +5,7 @@ import { play } from "../lib/playMusic";
 import { connectDiscord } from "../lib/joinChannel";
 import { search } from "../lib/ytSearch";
 import { MoreVideoDetails } from "ytdl-core";
+import { LogType } from "../types/LogType";
 
 export default class PlayCommand extends Command {
   name = "play";
@@ -57,7 +58,7 @@ export default class PlayCommand extends Command {
               type: "PLAYING",
             }
           );
-          // this.client.db?.log(song, message.author.username, LogType.PLAY);
+          this.client.db?.log(song, message.author.username, LogType.PLAY);
           if (songInfos.length > 0) {
             this.sendEmbed(message.channel, "Now Playing", song.title);
           } else {

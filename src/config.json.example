@@ -1,5 +1,6 @@
 {
   "prefix": "*prefix*",
+  "prod": false,
   "token": "*token*",
   "yt": "*yt api key*",
   "genius": "*genius api key*",

@@ -1,3 +1,4 @@
+import config from "../config.json";
 import { MongoClient, ReplaceOptions, UpdateResult } from "mongodb";
 import { MoreVideoDetails } from "ytdl-core";
 import { Client } from "../types/Client";
@@ -17,6 +18,7 @@ export class DBLogger {
     username: string,
     logType: LogType
   ): Promise<boolean> {
+    if (!config.prod) return false;
     try {
       // log play in DB
       await this.mongoClient?.connect();
@@ -72,6 +74,7 @@ export class DBLogger {
   }
 
   public async logPlaylist(songInfos: MoreVideoDetails[], username: string) {
+    if (!config.prod) return false;
     await this.mongoClient?.connect();
     const collection = this.mongoClient?.db("potetobot").collection("stats");
 
