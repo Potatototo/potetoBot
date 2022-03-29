@@ -74,7 +74,9 @@ export default class PlayCommand extends Command {
         return this.sendEmbed(
           message.channel,
           "Added to Queue",
-          `${songInfos.length} songs`
+          `${songInfos.length} ${
+            songInfos.length > 1 ? "songs" : "song"
+          } from playlist`
         );
       }
       return this.sendEmbed(
