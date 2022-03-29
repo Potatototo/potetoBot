@@ -67,7 +67,7 @@ export default class PlayCommand extends Command {
         }
       }
 
-      this.client.songs.concat(songInfos);
+      this.client.songs = this.client.songs.concat(songInfos);
       this.client.db?.logPlaylist(songInfos, message.author.username);
 
       if (songInfos.length > 0) {
