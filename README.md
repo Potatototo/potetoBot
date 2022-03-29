@@ -9,7 +9,7 @@
 | Queue View Command                      | :white_check_mark: |
 | Now Playing Command                     | :white_check_mark: |
 | Queue Remove Command                    | :white_check_mark: |
-| PlayTop Command                         |                    |
+| PlayTop Command                         | :white_check_mark: |
 | Reimplement Volume Settings for new API |        :x:         |
 | Ping Functionality                      | :white_check_mark: |
 | Command Categories to sort in Help View | :white_check_mark: |
