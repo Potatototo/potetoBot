@@ -26,8 +26,13 @@ client.once("disconnect", () => {
 
 // Command handling
 client.on("messageCreate", async (message) => {
-  // no prefix
-  if (message.author.bot || !message.content.startsWith(config.prefix)) return;
+  // no prefix, wrong channel, own message
+  if (
+    message.author.bot ||
+    !config.channels.includes(message.channel.id) ||
+    !message.content.startsWith(config.prefix)
+  )
+    return;
 
   const args = message.content.slice(config.prefix.length).trim().split(/ +/);
   const commandName = args.shift()?.toLowerCase() as string;
