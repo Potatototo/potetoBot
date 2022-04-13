@@ -41,10 +41,10 @@ async function linkSearch(
   keyword: string
 ): Promise<Message<boolean>> {
   const songInfo = (await ytdl.getInfo(keyword)).videoDetails;
-  playOrQueue(command.client, songInfo);
   const embedTitle = command.client.currentSong
     ? "Added to Queue"
     : "Now Playing";
+  playOrQueue(command.client, songInfo);
   return command.sendEmbed(channel, embedTitle, songInfo.title);
 }
 
@@ -60,17 +60,14 @@ async function keywordSearch(
     if (search.items[i].id.kind === "youtube#video") {
       const songInfo = (await ytdl.getInfo(search.items[i].id.videoId))
         .videoDetails;
+      const embedTitle = command.client.currentSong
+        ? "Added to Queue"
+        : "Now Playing";
       playOrQueue(command.client, songInfo);
-      const embedTitle =
-        command.client.currentSong === null ? "Now Playing" : "Added to Queue";
       return command.sendEmbed(channel, embedTitle, songInfo.title);
     }
   }
-  const songInfo = (await ytdl.getInfo(search.items[0].id.videoId))
-    .videoDetails;
-  const embedTitle =
-    command.client.currentSong === null ? "Now Playing" : "Added to Queue";
-  return command.sendEmbed(channel, embedTitle, songInfo.title);
+  return command.sendEmbed(channel, "Error", "Couldn't find that song");
 }
 
 async function playlistSearch(
