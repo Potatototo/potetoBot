@@ -61,17 +61,15 @@ async function keywordSearch(
       const songInfo = (await ytdl.getInfo(search.items[i].id.videoId))
         .videoDetails;
       playOrQueue(command.client, songInfo);
-      const embedTitle = command.client.currentSong
-        ? "Added to Queue"
-        : "Now Playing";
+      const embedTitle =
+        command.client.currentSong === null ? "Now Playing" : "Added to Queue";
       return command.sendEmbed(channel, embedTitle, songInfo.title);
     }
   }
   const songInfo = (await ytdl.getInfo(search.items[0].id.videoId))
     .videoDetails;
-  const embedTitle = command.client.currentSong
-    ? "Added to Queue"
-    : "Now Playing";
+  const embedTitle =
+    command.client.currentSong === null ? "Now Playing" : "Added to Queue";
   return command.sendEmbed(channel, embedTitle, songInfo.title);
 }
 
