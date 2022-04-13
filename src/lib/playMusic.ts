@@ -9,7 +9,19 @@ import {
 import ytdl, { MoreVideoDetails } from "ytdl-core";
 import { Client } from "../types/Client";
 
-export function play(client: Client, song: string) {
+export function playOrQueue(client: Client, song: MoreVideoDetails) {
+  if (client.currentSong) {
+    client.songs.push(song);
+  } else {
+    client.currentSong = song;
+    play(client, song.video_url);
+    client.user?.setActivity(client.currentSong.title, {
+      type: "PLAYING",
+    });
+  }
+}
+
+function play(client: Client, song: string) {
   const resource = createAudioResource(
     ytdl(song, {
       filter: "audioonly",
@@ -26,7 +38,7 @@ export function createPlayerSubscription(
 ): PlayerSubscription | undefined {
   const player: AudioPlayer = createAudioPlayer();
   player.on(AudioPlayerStatus.Idle, () => {
-    console.log(`Fisnished: ${client.currentSong?.title}`);
+    console.log(`Finished: ${client.currentSong?.title}`);
     if (client.songs.length > 0) {
       const nextSong = client.songs.shift() as MoreVideoDetails;
       client.currentSong = nextSong;

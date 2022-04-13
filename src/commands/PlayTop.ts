@@ -40,12 +40,11 @@ export default class JoinCommand extends Command {
     try {
       // get song info
       const songInfos = await search(args.join(" "));
-
       if (songInfos.length === 0) {
         return this.sendEmbed(
           message.channel,
           "Error",
-          "Coulnd't find that song"
+          "Couldn't find that song"
         );
       }
 
