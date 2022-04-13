@@ -30,6 +30,11 @@ export async function connectDiscord(client: Client, vc: VoiceBasedChannel) {
     if (Array.from(vc.members.keys()).length <= 1) {
       connection.destroy();
       client.subscription = null;
+      client.songs = [];
+      client.currentSong = null;
+      client.user?.setActivity("Basti Songs", {
+        type: "PLAYING",
+      });
       clearInterval(intervalId);
     }
   }, 5 * 60 * 1000);
