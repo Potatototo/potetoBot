@@ -14,7 +14,7 @@ export async function search(keyword: string) {
       `https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=${keyword}&key=${config.yt}`
     ).then((response) => response.json())) as YTRes;
     for (let i = 0; i < search.items.length; i++) {
-      if (search.items[i].kind === "youtube#video") {
+      if (search.items[i].id.kind === "youtube#video") {
         const songInfo = (await ytdl.getInfo(search.items[i].id.videoId))
           .videoDetails;
         return [songInfo];

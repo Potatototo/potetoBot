@@ -54,7 +54,7 @@ export default class JoinCommand extends Command {
       return this.sendEmbed(
         message.channel,
         "Added to Queue",
-        `${songInfos.length} ${songInfos.length > 1 ? "songs" : "song"}`
+        songInfos[0].title
       );
     } catch (err) {
       console.error(err);
