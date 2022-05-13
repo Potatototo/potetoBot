@@ -40,12 +40,28 @@ async function linkSearch(
   channel: TextBasedChannel,
   keyword: string
 ): Promise<Message<boolean>> {
-  const songInfo = (await ytdl.getInfo(keyword)).videoDetails;
-  const embedTitle = command.client.currentSong
-    ? "Added to Queue"
-    : "Now Playing";
-  playOrQueue(command.client, songInfo);
-  return command.sendEmbed(channel, embedTitle, songInfo.title);
+  return ytdl
+    .getInfo(keyword)
+    .then((songInfo) => {
+      const embedTitle = command.client.currentSong
+        ? "Added to Queue"
+        : "Now Playing";
+      playOrQueue(command.client, songInfo.videoDetails);
+      return command.sendEmbed(
+        channel,
+        embedTitle,
+        songInfo.videoDetails.title
+      );
+    })
+    .catch(() => {
+      return command.sendEmbed(
+        channel,
+        "Error",
+        "Song unavailable (Age Restriction)"
+      );
+    });
+
+  return command.sendEmbed(channel, "Keyword Search", "Searching...");
 }
 
 async function keywordSearch(
@@ -58,16 +74,29 @@ async function keywordSearch(
   ).then((response) => response.json())) as YTRes;
   for (let i = 0; i < search.items.length; i++) {
     if (search.items[i].id.kind === "youtube#video") {
-      const songInfo = (await ytdl.getInfo(search.items[i].id.videoId))
-        .videoDetails;
-      const embedTitle = command.client.currentSong
-        ? "Added to Queue"
-        : "Now Playing";
-      playOrQueue(command.client, songInfo);
-      return command.sendEmbed(channel, embedTitle, songInfo.title);
+      return ytdl
+        .getInfo(search.items[i].id.videoId)
+        .then((songInfo) => {
+          const embedTitle = command.client.currentSong
+            ? "Added to Queue"
+            : "Now Playing";
+          playOrQueue(command.client, songInfo.videoDetails);
+          return command.sendEmbed(
+            channel,
+            embedTitle,
+            songInfo.videoDetails.title
+          );
+        })
+        .catch(() => {
+          return command.sendEmbed(
+            channel,
+            "Error",
+            "Song unavailable (Age Restriction)"
+          );
+        });
     }
   }
-  return command.sendEmbed(channel, "Error", "Couldn't find that song");
+  return command.sendEmbed(channel, "Keyword Search", "Searching...");
 }
 
 async function playlistSearch(
