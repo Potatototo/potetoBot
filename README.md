@@ -19,4 +19,4 @@
 | Lyrics Command                          | :white_check_mark: |
 | Remove Deafened Symbol                  | :white_check_mark: |
 | Add progress bar                        | :white_check_mark: |
-| Playlist Support                        |   :construction:   |
+| Playlist Support                        | :white_check_mark: |
