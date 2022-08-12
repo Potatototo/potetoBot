@@ -21,7 +21,7 @@
     "node-fetch": "^2.6.6",
     "npm": "^8.12.1",
     "tweetnacl": "^1.0.3",
-    "ytdl-core": "^4.9.2"
+    "ytdl-core": "^4.11.0"
   },
   "devDependencies": {
     "@types/ffmpeg": "^1.0.4",
