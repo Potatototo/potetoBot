@@ -1,8 +1,8 @@
-import config from "../config.json";
+import config from "../../config.json";
 import { Message } from "discord.js";
 import Genius from "genius-lyrics";
-import { Command } from "../types/Command";
-import { CommandCategory } from "../types/CommandCategory";
+import { Command } from "../../types/Command";
+import { CommandCategory } from "../../types/CommandCategory";
 
 const Client = new Genius.Client(config.genius);
 
