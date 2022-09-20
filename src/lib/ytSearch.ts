@@ -40,28 +40,21 @@ async function linkSearch(
   channel: TextBasedChannel,
   keyword: string
 ): Promise<Message<boolean>> {
-  return ytdl
-    .getInfo(keyword)
-    .then((songInfo) => {
-      const embedTitle = command.client.currentSong
-        ? "Added to Queue"
-        : "Now Playing";
-      playOrQueue(command.client, songInfo.videoDetails);
-      return command.sendEmbed(
-        channel,
-        embedTitle,
-        songInfo.videoDetails.title
-      );
-    })
-    .catch(() => {
-      return command.sendEmbed(
-        channel,
-        "Error",
-        "Song unavailable (Age Restriction)"
-      );
-    });
-
-  return command.sendEmbed(channel, "Keyword Search", "Searching...");
+  try {
+    const videoInfo = await ytdl.getInfo(keyword);
+    const embedTitle = command.client.currentSong
+      ? "Added to Queue"
+      : "Now Playing";
+    playOrQueue(command.client, videoInfo.videoDetails);
+    return command.sendEmbed(channel, embedTitle, videoInfo.videoDetails.title);
+  } catch (error) {
+    return command.sendEmbed(
+      channel,
+      "Error",
+      "Song unavailable (Age Restriction)"
+    );
+  }
+  // return command.sendEmbed(channel, "Keyword Search", "Searching...");
 }
 
 async function keywordSearch(
@@ -74,26 +67,24 @@ async function keywordSearch(
   ).then((response) => response.json())) as YTRes;
   for (let i = 0; i < search.items.length; i++) {
     if (search.items[i].id.kind === "youtube#video") {
-      return ytdl
-        .getInfo(search.items[i].id.videoId)
-        .then((songInfo) => {
-          const embedTitle = command.client.currentSong
-            ? "Added to Queue"
-            : "Now Playing";
-          playOrQueue(command.client, songInfo.videoDetails);
-          return command.sendEmbed(
-            channel,
-            embedTitle,
-            songInfo.videoDetails.title
-          );
-        })
-        .catch(() => {
-          return command.sendEmbed(
-            channel,
-            "Error",
-            "Song unavailable (Age Restriction)"
-          );
-        });
+      try {
+        const videoInfo = await ytdl.getInfo(search.items[i].id.videoId);
+        const embedTitle = command.client.currentSong
+          ? "Added to Queue"
+          : "Now Playing";
+        playOrQueue(command.client, videoInfo.videoDetails);
+        return command.sendEmbed(
+          channel,
+          embedTitle,
+          videoInfo.videoDetails.title
+        );
+      } catch (error) {
+        return command.sendEmbed(
+          channel,
+          "Error",
+          "Song unavailable (Age Restriction)"
+        );
+      }
     }
   }
   return command.sendEmbed(channel, "Keyword Search", "Searching...");
@@ -108,7 +99,7 @@ async function playlistSearch(
   for (const s of keyword.split(/[&?]/)) {
     if (s.includes("list=")) playlistId = s.substring(5);
   }
-  recPlaylistInfo(command, playlistId, "", 50);
+  recursivePlaylistInfo(command, playlistId, "", 50);
   const search = await fetch(
     `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=1&playlistId=${playlistId}&key=${config.yt}`
   ).then((response) => response.json());
@@ -119,7 +110,7 @@ async function playlistSearch(
   );
 }
 
-async function recPlaylistInfo(
+async function recursivePlaylistInfo(
   command: Command,
   playlistId: string,
   pageToken: string,
@@ -133,7 +124,7 @@ async function recPlaylistInfo(
     .then((response) => response.json())
     .then((search) => {
       if (processedCount < search.pageInfo.totalResults) {
-        recPlaylistInfo(
+        recursivePlaylistInfo(
           command,
           playlistId,
           search.nextPageToken,
