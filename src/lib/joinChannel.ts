@@ -5,7 +5,7 @@ import {
   VoiceConnection,
   VoiceConnectionStatus,
 } from "@discordjs/voice";
-import { VoiceBasedChannel } from "discord.js";
+import { ActivityType, VoiceBasedChannel } from "discord.js";
 import { Client } from "../types/Client";
 import { createPlayerSubscription } from "./playMusic";
 
@@ -32,9 +32,7 @@ export async function connectDiscord(client: Client, vc: VoiceBasedChannel) {
       client.subscription = null;
       client.songs = [];
       client.currentSong = null;
-      client.user?.setActivity("Basti Songs", {
-        type: "PLAYING",
-      });
+      client.user?.setActivity("Basti Songs", { type: ActivityType.Playing });
       clearInterval(intervalId);
     }
   }, 5 * 60 * 1000);

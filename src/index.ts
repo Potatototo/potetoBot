@@ -2,6 +2,7 @@ import config from "./config.json";
 import { Client } from "./types/Client";
 import { MongoClient } from "mongodb";
 import { DBLogger } from "./lib/logDB";
+import { ActivityType } from "discord.js";
 
 const client = new Client();
 
@@ -11,7 +12,7 @@ client.db = new DBLogger(client, mongoClient);
 // Connection updates
 client.once("ready", () => {
   if (client.user) {
-    client.user.setActivity("Basti Songs", { type: "PLAYING" });
+    client.user.setActivity("Basti Songs", { type: ActivityType.Playing });
     console.log("Ready!");
   } else {
     console.log("quantum physics bug, literally impossible, not my fault");

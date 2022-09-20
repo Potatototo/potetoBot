@@ -1,4 +1,4 @@
-import { Message } from "discord.js";
+import { ActivityType, Message } from "discord.js";
 import { Command } from "../types/Command";
 import { CommandCategory } from "../types/CommandCategory";
 
@@ -10,6 +10,11 @@ const leaveMessages: string[] = [
   "Okay bye...",
   ":(",
   "Fuck you all anyways",
+  "Laters",
+  "Peace",
+  "Peace Out",
+  "I'm out",
+  "Bin raus für heute Leute",
 ];
 
 export default class LeaveCommand extends Command {
@@ -21,7 +26,9 @@ export default class LeaveCommand extends Command {
 
   async execute(message: Message): Promise<Message> {
     try {
-      this.client.user?.setActivity("Basti Songs", { type: "PLAYING" });
+      this.client.user?.setActivity("Basti Songs", {
+        type: ActivityType.Playing,
+      });
       if (this.client.subscription) {
         for (const vc of this.client.subscription.player.playable) {
           vc.destroy();

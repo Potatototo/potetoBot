@@ -1,4 +1,8 @@
-import { Collection, Client as DiscordClient, Intents } from "discord.js";
+import {
+  Collection,
+  Client as DiscordClient,
+  GatewayIntentBits,
+} from "discord.js";
 import { Command } from "./Command";
 import { MoreVideoDetails } from "ytdl-core";
 import { readdirSync } from "fs";
@@ -15,9 +19,10 @@ export class Client extends DiscordClient {
   public constructor() {
     super({
       intents: [
-        Intents.FLAGS.GUILDS,
-        Intents.FLAGS.GUILD_MESSAGES,
-        Intents.FLAGS.GUILD_VOICE_STATES,
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildVoiceStates,
       ],
     });
     this.commands = new Collection();

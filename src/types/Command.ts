@@ -1,12 +1,7 @@
-import {
-  ColorResolvable,
-  Message,
-  MessageEmbed,
-  MessageEmbedOptions,
-  TextBasedChannel,
-} from "discord.js";
+import { Message, EmbedBuilder, TextBasedChannel } from "discord.js";
 import { Client } from "./Client";
 import { CommandCategory } from "./CommandCategory";
+import { EmbedConst } from "./EmbedConst";
 
 export abstract class Command {
   client: Client;
@@ -27,35 +22,30 @@ export abstract class Command {
     title: string,
     fields: string | string[]
   ) {
-    const eo: MessageEmbedOptions = {
-      author: {
-        name: "potetoBot",
-        iconURL: "https://i.imgur.com/8HzsYp9.png",
-      },
-      color: "#E6722E" as ColorResolvable,
-      fields: [],
-    };
+    const e = new EmbedBuilder()
+      .setAuthor(EmbedConst.author)
+      .setColor(EmbedConst.color);
     if (typeof fields === "string") {
-      eo.fields?.push({
+      e.addFields({
         name: title,
         value: fields,
         inline: false,
       });
     } else {
-      for (let i = 0; i < fields.length - 1; i++) {
+      // for (let i = 0; i < fields.length - 1; i++) {
+      for (let i = 0; i < fields.length; i++) {
         const f = {
           name: "",
           value: fields[i],
           inline: false,
         };
         f["name"] = i === 0 ? title : "\u200b";
-        eo.fields?.push(f);
+        e.addFields(f);
       }
-      eo["footer"] = {
-        text: fields[fields.length - 1],
-      };
+      // eo["footer"] = {
+      //   text: fields[fields.length - 1],
+      // };
     }
-    const e = new MessageEmbed(eo);
     return channel.send({ embeds: [e] });
   }
 }

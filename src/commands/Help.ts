@@ -1,13 +1,9 @@
 import { readdirSync } from "fs";
-import {
-  ColorResolvable,
-  Message,
-  MessageEmbed,
-  MessageEmbedOptions,
-} from "discord.js";
+import { Message, EmbedBuilder } from "discord.js";
 import { Command } from "../types/Command";
 import { CommandCategory } from "../types/CommandCategory";
 import config from "../config.json";
+import { EmbedConst } from "../types/EmbedConst";
 
 export default class HelpCommand extends Command {
   name = "help";
@@ -47,13 +43,10 @@ export default class HelpCommand extends Command {
       else if (command.category === CommandCategory.UTILITY) u += line + "\n";
     }
 
-    const eo: MessageEmbedOptions = {
-      author: {
-        name: "potetoBot",
-        iconURL: "https://i.imgur.com/8HzsYp9.png",
-      },
-      color: "#E6722E" as ColorResolvable,
-      fields: [
+    const e = new EmbedBuilder()
+      .setAuthor(EmbedConst.author)
+      .setColor(EmbedConst.color)
+      .addFields([
         {
           name: "Music",
           value: m,
@@ -69,8 +62,8 @@ export default class HelpCommand extends Command {
           value: u,
           inline: false,
         },
-      ],
-    };
-    return message.channel.send({ embeds: [new MessageEmbed(eo)] });
+      ]);
+
+    return message.channel.send({ embeds: [e] });
   }
 }

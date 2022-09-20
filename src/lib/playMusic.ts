@@ -6,6 +6,7 @@ import {
   PlayerSubscription,
   VoiceConnection,
 } from "@discordjs/voice";
+import { ActivityType } from "discord.js";
 import ytdl, { MoreVideoDetails } from "ytdl-core";
 import { Client } from "../types/Client";
 
@@ -16,7 +17,7 @@ export function playOrQueue(client: Client, song: MoreVideoDetails) {
     client.currentSong = song;
     play(client, song.video_url);
     client.user?.setActivity(client.currentSong.title, {
-      type: "PLAYING",
+      type: ActivityType.Playing,
     });
   }
 }
@@ -43,12 +44,12 @@ export function createPlayerSubscription(
       const nextSong = client.songs.shift() as MoreVideoDetails;
       client.currentSong = nextSong;
       client.user?.setActivity(nextSong.title, {
-        type: "PLAYING",
+        type: ActivityType.Playing,
       });
       play(client, nextSong.video_url);
     } else {
       client.currentSong = null;
-      client.user?.setActivity("you", { type: "WATCHING" });
+      client.user?.setActivity("you", { type: ActivityType.Watching });
     }
   });
   player.on("error", (error) => {
