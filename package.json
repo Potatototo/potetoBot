@@ -15,7 +15,7 @@
     "discord.js": "^14.3.0",
     "ffmpeg": "^0.0.4",
     "fluent-ffmpeg": "^2.1.2",
-    "genius-lyrics": "^4.2.9",
+    "genius-lyrics": "^4.4.0",
     "mongodb": "^4.3.1",
     "node": "^17.3.1",
     "node-fetch": "^2.6.6",
