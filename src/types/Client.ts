@@ -8,6 +8,7 @@ import { MoreVideoDetails } from "ytdl-core";
 import { readdirSync } from "fs";
 import { PlayerSubscription } from "@discordjs/voice";
 import { DBLogger } from "../lib/logDB";
+import { Logger, LogLevel } from "../utils/Logger";
 
 export class Client extends DiscordClient {
   commands: Collection<string, Command>;
@@ -16,7 +17,15 @@ export class Client extends DiscordClient {
   songs: MoreVideoDetails[];
   currentSong: MoreVideoDetails | null;
 
-  public constructor() {
+  private static instance: Client;
+  public static getInstance(): Client {
+    if (!Client.instance) {
+      Client.instance = new Client();
+    }
+    return Client.instance;
+  }
+
+  private constructor() {
     super({
       intents: [
         GatewayIntentBits.Guilds,
@@ -37,19 +46,29 @@ export class Client extends DiscordClient {
   private loadCommands() {
     const dev: boolean = process.argv[0].includes("ts-node");
     const commandPath: string = dev ? "src/commands" : "dist/commands";
+
     const commandFiles: string[] = readdirSync(commandPath).filter(
       (file) => file.endsWith(".js") || file.endsWith(".ts")
     );
 
     for (const file of commandFiles) {
+      const filePath = `../commands/${file}`;
       // eslint-disable-next-line @typescript-eslint/no-var-requires
-      const commandFile = require(`../commands/${file}`).default;
-      const command: Command = new commandFile(this);
-      this.commands.set(command.name, command);
-      console.log(`Loading command ${command.name}`);
-      for (const a of command.alias) {
-        this.commands.set(a, command);
-        console.log(`Loading command alias ${a}`);
+      const command = require(filePath);
+
+      if ("data" in command && "execute" in command) {
+        this.commands.set(command.data.name, command);
+        Logger.info(`Loading command ${command.data.name}`);
+        // for (const a of command.alias) {
+        //   this.commands.set(a, command);
+        //   Logger.log(LogLevel.INFO, "");
+        //   console.log(`Loading command alias ${a}`);
+        // }
+      } else {
+        Logger.log(
+          LogLevel.WARN,
+          `The command at ${filePath} is missing a required "data" or "execute" property.`
+        );
       }
     }
   }

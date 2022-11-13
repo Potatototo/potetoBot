@@ -1,4 +1,9 @@
-import { Message, EmbedBuilder, TextBasedChannel } from "discord.js";
+import {
+  Message,
+  EmbedBuilder,
+  TextBasedChannel,
+  CommandInteraction,
+} from "discord.js";
 import { Client } from "./Client";
 import { CommandCategory } from "./CommandCategory";
 import { EmbedConst } from "./EmbedConst";
@@ -11,7 +16,10 @@ export abstract class Command {
   abstract description: string;
   abstract category: CommandCategory;
 
-  abstract execute(message: Message, args?: string[]): Promise<Message>;
+  abstract execute(
+    interaction: CommandInteraction,
+    args?: string[]
+  ): Promise<Message>;
 
   public constructor(client: Client) {
     this.client = client;

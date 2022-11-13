@@ -2,9 +2,10 @@ import config from "./config.json";
 import { Client } from "./types/Client";
 import { MongoClient } from "mongodb";
 import { DBLogger } from "./lib/logDB";
-import { ActivityType } from "discord.js";
+import { ActivityType, Events } from "discord.js";
+import { Logger } from "./utils/Logger";
 
-const client = new Client();
+const client = Client.getInstance();
 
 const mongoClient = new MongoClient(config.mongo);
 client.db = new DBLogger(client, mongoClient);
@@ -13,41 +14,36 @@ client.db = new DBLogger(client, mongoClient);
 client.once("ready", () => {
   if (client.user) {
     client.user.setActivity("Basti Songs", { type: ActivityType.Playing });
-    console.log("Ready!");
+    Logger.info(`${client.user.tag} has logged in!`);
   } else {
-    console.log("quantum physics bug, literally impossible, not my fault");
+    Logger.error("quantum physics bug, literally impossible, not my fault");
   }
 });
 client.once("reconnecting", () => {
-  console.log("Reconnecting!");
+  Logger.warning("Reconnecting");
 });
 client.once("disconnect", () => {
-  console.log("Disconnect!");
+  Logger.error("Disconnected");
 });
 
-// Command handling
-client.on("messageCreate", async (message) => {
-  // no prefix, wrong channel, own message
-  if (
-    message.author.bot ||
-    !config.channels.includes(message.channel.id) ||
-    !message.content.startsWith(config.prefix)
-  )
+client.on(Events.InteractionCreate, async (interaction) => {
+  if (!interaction.isChatInputCommand()) return;
+
+  const command = client.commands.get(interaction.commandName);
+
+  if (!command) {
+    Logger.error(`No command matching ${interaction.commandName} was found.`);
     return;
+  }
 
-  const args = message.content.slice(config.prefix.length).trim().split(/ +/);
-  const commandName = args.shift()?.toLowerCase() as string;
-
-  // not a command
-  if (!client.commands.has(commandName)) return;
-  const command = client.commands.get(commandName);
-
-  // command execution
   try {
-    if (command) command.execute(message, args);
-  } catch (err) {
-    console.error(err);
-    message.reply("there was an error trying to execute that command!");
+    await command.execute(interaction);
+  } catch (error) {
+    console.error(error);
+    await interaction.reply({
+      content: "There was an error while executing this command!",
+      ephemeral: true,
+    });
   }
 });
 

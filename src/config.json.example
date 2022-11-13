@@ -2,6 +2,7 @@
   "prefix": "*prefix*",
   "prod": false,
   "token": "*token*",
+  "clientID": "Discord app ID",
   "yt": "*yt api key*",
   "genius": "*genius api key*",
   "mongo": "*mongoUri with PW*",

@@ -9,6 +9,7 @@ import {
 import { ActivityType } from "discord.js";
 import ytdl, { MoreVideoDetails } from "ytdl-core";
 import { Client } from "../types/Client";
+import { Logger } from "../utils/Logger";
 
 export function playOrQueue(client: Client, song: MoreVideoDetails) {
   if (client.currentSong) {
@@ -39,7 +40,7 @@ export function createPlayerSubscription(
 ): PlayerSubscription | undefined {
   const player: AudioPlayer = createAudioPlayer();
   player.on(AudioPlayerStatus.Idle, () => {
-    console.log(`Finished: ${client.currentSong?.title}`);
+    Logger.info(`Finished: ${client.currentSong?.title}`);
     if (client.songs.length > 0) {
       const nextSong = client.songs.shift() as MoreVideoDetails;
       client.currentSong = nextSong;
@@ -53,7 +54,7 @@ export function createPlayerSubscription(
     }
   });
   player.on("error", (error) => {
-    console.log("Audio player error: ", error.message);
+    Logger.error(`Audio player error: ${error.message}`);
   });
   return connection.subscribe(player);
 }

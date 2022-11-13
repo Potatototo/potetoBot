@@ -7,10 +7,11 @@ import {
 } from "@discordjs/voice";
 import { ActivityType, VoiceBasedChannel } from "discord.js";
 import { Client } from "../types/Client";
+import { Logger } from "../utils/Logger";
 import { createPlayerSubscription } from "./playMusic";
 
 export async function connectDiscord(client: Client, vc: VoiceBasedChannel) {
-  console.log(`Joining ${vc.name}`);
+  Logger.info(`Joining ${vc.name}`);
   const connection: VoiceConnection = joinVoiceChannel({
     channelId: vc.id,
     guildId: vc.guild.id,
@@ -23,7 +24,7 @@ export async function connectDiscord(client: Client, vc: VoiceBasedChannel) {
   const sub = createPlayerSubscription(client, connection);
   if (sub) {
     client.subscription = sub;
-    console.log("Setting connection");
+    Logger.info("Connection set");
   }
 
   const intervalId = setInterval(function () {

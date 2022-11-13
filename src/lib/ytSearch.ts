@@ -3,8 +3,9 @@ import config from "../config.json";
 import ytdl from "ytdl-core";
 import { YTRes } from "../types/IYtApi";
 import { playOrQueue } from "./playMusic";
-import { Command } from "../types/Command";
-import { Message, TextBasedChannel } from "discord.js";
+import { CommandInteraction } from "discord.js";
+import { Client } from "../types/Client";
+import { sendEmbed } from "./sendEmbed";
 
 export async function search(keyword: string) {
   if (keyword.includes("https")) {
@@ -25,43 +26,28 @@ export async function search(keyword: string) {
 }
 
 export async function searchAndPlay(
-  command: Command,
-  channel: TextBasedChannel,
+  interaction: CommandInteraction,
   keyword: string
-): Promise<Message> {
-  if (keyword.includes("list="))
-    return playlistSearch(command, channel, keyword);
-  if (keyword.includes("v=")) return linkSearch(command, channel, keyword);
-  return keywordSearch(command, channel, keyword);
+) {
+  if (keyword.includes("list=")) playlistSearch(interaction, keyword);
+  if (keyword.includes("v=")) linkSearch(interaction, keyword);
+  keywordSearch(interaction, keyword);
 }
 
-async function linkSearch(
-  command: Command,
-  channel: TextBasedChannel,
-  keyword: string
-): Promise<Message<boolean>> {
+async function linkSearch(interaction: CommandInteraction, keyword: string) {
   try {
+    const client = Client.getInstance();
     const videoInfo = await ytdl.getInfo(keyword);
-    const embedTitle = command.client.currentSong
-      ? "Added to Queue"
-      : "Now Playing";
-    playOrQueue(command.client, videoInfo.videoDetails);
-    return command.sendEmbed(channel, embedTitle, videoInfo.videoDetails.title);
+    const embedTitle = client.currentSong ? "Added to Queue" : "Now Playing";
+    playOrQueue(client, videoInfo.videoDetails);
+    sendEmbed(interaction, embedTitle, videoInfo.videoDetails.title);
   } catch (error) {
-    return command.sendEmbed(
-      channel,
-      "Error",
-      "Song unavailable (Age Restriction)"
-    );
+    sendEmbed(interaction, "Error", "Song unavailable (Age Restriction)");
   }
-  // return command.sendEmbed(channel, "Keyword Search", "Searching...");
 }
 
-async function keywordSearch(
-  command: Command,
-  channel: TextBasedChannel,
-  keyword: string
-): Promise<Message<boolean>> {
+async function keywordSearch(interaction: CommandInteraction, keyword: string) {
+  const client = Client.getInstance();
   const search: YTRes = (await fetch(
     `https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=25&q=${keyword}&key=${config.yt}`
   ).then((response) => response.json())) as YTRes;
@@ -69,49 +55,41 @@ async function keywordSearch(
     if (search.items[i].id.kind === "youtube#video") {
       try {
         const videoInfo = await ytdl.getInfo(search.items[i].id.videoId);
-        const embedTitle = command.client.currentSong
+        const embedTitle = client.currentSong
           ? "Added to Queue"
           : "Now Playing";
-        playOrQueue(command.client, videoInfo.videoDetails);
-        return command.sendEmbed(
-          channel,
-          embedTitle,
-          videoInfo.videoDetails.title
-        );
+        playOrQueue(client, videoInfo.videoDetails);
+        sendEmbed(interaction, embedTitle, videoInfo.videoDetails.title);
+        return;
       } catch (error) {
-        return command.sendEmbed(
-          channel,
-          "Error",
-          "Song unavailable (Age Restriction)"
-        );
+        sendEmbed(interaction, "Error", "Song unavailable (Age Restriction)");
       }
     }
   }
-  return command.sendEmbed(channel, "Keyword Search", "Searching...");
+  // sendEmbed(channel, "Keyword Search", "Searching...");
 }
 
 async function playlistSearch(
-  command: Command,
-  channel: TextBasedChannel,
+  interaction: CommandInteraction,
   keyword: string
 ) {
+  const client = Client.getInstance();
   let playlistId = "";
   for (const s of keyword.split(/[&?]/)) {
     if (s.includes("list=")) playlistId = s.substring(5);
   }
-  recursivePlaylistInfo(command, playlistId, "", 50);
+  recursivePlaylistInfo(playlistId, "", 50);
   const search = await fetch(
     `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=1&playlistId=${playlistId}&key=${config.yt}`
   ).then((response) => response.json());
-  return command.sendEmbed(
-    channel,
+  sendEmbed(
+    interaction,
     "Now Playing",
     `${search.pageInfo.totalResults} songs`
   );
 }
 
 async function recursivePlaylistInfo(
-  command: Command,
   playlistId: string,
   pageToken: string,
   processedCount: number
@@ -125,7 +103,6 @@ async function recursivePlaylistInfo(
     .then((search) => {
       if (processedCount < search.pageInfo.totalResults) {
         recursivePlaylistInfo(
-          command,
           playlistId,
           search.nextPageToken,
           processedCount + 50
@@ -135,7 +112,7 @@ async function recursivePlaylistInfo(
         ytdl
           .getInfo(v.snippet.resourceId.videoId)
           .then((res) => {
-            playOrQueue(command.client, res.videoDetails);
+            playOrQueue(Client.getInstance(), res.videoDetails);
           })
           .catch(() => console.log("Unavailable video in playlist"));
       }
