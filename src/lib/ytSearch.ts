@@ -29,9 +29,9 @@ export async function searchAndPlay(
   interaction: CommandInteraction,
   keyword: string
 ) {
-  if (keyword.includes("list=")) playlistSearch(interaction, keyword);
-  if (keyword.includes("v=")) linkSearch(interaction, keyword);
-  keywordSearch(interaction, keyword);
+  if (keyword.includes("list=")) return playlistSearch(interaction, keyword);
+  if (keyword.includes("v=")) return linkSearch(interaction, keyword);
+  return keywordSearch(interaction, keyword);
 }
 
 async function linkSearch(interaction: CommandInteraction, keyword: string) {
@@ -66,7 +66,6 @@ async function keywordSearch(interaction: CommandInteraction, keyword: string) {
       }
     }
   }
-  // sendEmbed(channel, "Keyword Search", "Searching...");
 }
 
 async function playlistSearch(
@@ -81,7 +80,7 @@ async function playlistSearch(
   recursivePlaylistInfo(playlistId, "", 50);
   const search = await fetch(
     `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=1&playlistId=${playlistId}&key=${config.yt}`
-  ).then((response) => response.json());
+  ).then((response) => response.json() as any);
   sendEmbed(
     interaction,
     "Now Playing",
@@ -99,7 +98,7 @@ async function recursivePlaylistInfo(
       ? `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet%2Cstatus&maxResults=50&playlistId=${playlistId}&key=${config.yt}`
       : `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet%2Cstatus&maxResults=50&playlistId=${playlistId}&pageToken=${pageToken}&key=${config.yt}`;
   fetch(apiLink)
-    .then((response) => response.json())
+    .then((response) => response.json() as any)
     .then((search) => {
       if (processedCount < search.pageInfo.totalResults) {
         recursivePlaylistInfo(

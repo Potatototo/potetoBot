@@ -1,8 +1,4 @@
-import {
-  CommandInteraction,
-  SlashCommandBuilder,
-  VoiceBasedChannel,
-} from "discord.js";
+import { SlashCommandBuilder } from "discord.js";
 import { sendEmbed } from "../lib/sendEmbed";
 import { search } from "../lib/ytSearch";
 import { Client } from "../types/Client";
