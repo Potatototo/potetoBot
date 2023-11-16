@@ -1,4 +1,4 @@
-import { videoInfo } from "ytdl-core";
+import { videoInfo } from "@distube/ytdl-core";
 
 export class ImportantVideoDetails {
   title: string;

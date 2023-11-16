@@ -1,6 +1,6 @@
 import fetch from "node-fetch";
 import config from "../config.json";
-import ytdl from "ytdl-core";
+import ytdl from "@distube/ytdl-core";
 import { YTRes } from "../types/IYtApi";
 import { playOrQueue } from "./playMusic";
 import { CommandInteraction } from "discord.js";
@@ -42,7 +42,7 @@ async function linkSearch(interaction: CommandInteraction, keyword: string) {
     playOrQueue(client, videoInfo.videoDetails);
     sendEmbed(interaction, embedTitle, videoInfo.videoDetails.title);
   } catch (error) {
-    // sendEmbed(interaction, "Error", "Song unavailable (Age Restriction)");
+    sendEmbed(interaction, "Error", "Song unavailable (Age Restriction)");
   }
 }
 
@@ -62,7 +62,8 @@ async function keywordSearch(interaction: CommandInteraction, keyword: string) {
         sendEmbed(interaction, embedTitle, videoInfo.videoDetails.title);
         return;
       } catch (error) {
-        // sendEmbed(interaction, "Error", "Song unavailable (Age Restriction)");
+        // console.log(error);
+        sendEmbed(interaction, "Error", "Song unavailable (Age Restriction)");
       }
     }
   }

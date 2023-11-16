@@ -7,7 +7,7 @@ import {
   VoiceConnection,
 } from "@discordjs/voice";
 import { ActivityType } from "discord.js";
-import ytdl, { MoreVideoDetails } from "ytdl-core";
+import ytdl, { MoreVideoDetails } from "@distube/ytdl-core";
 import { Client } from "../types/Client";
 import { Logger } from "../utils/Logger";
 

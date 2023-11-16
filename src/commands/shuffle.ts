@@ -1,5 +1,5 @@
 import { CommandInteraction, SlashCommandBuilder } from "discord.js";
-import { MoreVideoDetails } from "ytdl-core";
+import { MoreVideoDetails } from "@distube/ytdl-core";
 import { sendEmbed } from "../lib/sendEmbed";
 import { Client } from "../types/Client";
 

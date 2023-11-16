@@ -4,7 +4,7 @@ import {
   GatewayIntentBits,
 } from "discord.js";
 import { Command } from "./Command";
-import { MoreVideoDetails } from "ytdl-core";
+import { MoreVideoDetails } from "@distube/ytdl-core";
 import { readdirSync } from "fs";
 import { PlayerSubscription } from "@discordjs/voice";
 import { DBLogger } from "../lib/logDB";

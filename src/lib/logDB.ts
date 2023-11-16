@@ -1,6 +1,6 @@
 import config from "../config.json";
 import { MongoClient, ReplaceOptions, UpdateResult } from "mongodb";
-import { MoreVideoDetails } from "ytdl-core";
+import { MoreVideoDetails } from "@distube/ytdl-core";
 import { Client } from "../types/Client";
 import { LogType } from "../types/LogType";
 
