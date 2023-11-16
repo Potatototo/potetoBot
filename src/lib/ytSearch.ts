@@ -42,7 +42,7 @@ async function linkSearch(interaction: CommandInteraction, keyword: string) {
     playOrQueue(client, videoInfo.videoDetails);
     sendEmbed(interaction, embedTitle, videoInfo.videoDetails.title);
   } catch (error) {
-    sendEmbed(interaction, "Error", "Song unavailable (Age Restriction)");
+    // sendEmbed(interaction, "Error", "Song unavailable (Age Restriction)");
   }
 }
 
