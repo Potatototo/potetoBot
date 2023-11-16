@@ -62,7 +62,7 @@ async function keywordSearch(interaction: CommandInteraction, keyword: string) {
         sendEmbed(interaction, embedTitle, videoInfo.videoDetails.title);
         return;
       } catch (error) {
-        sendEmbed(interaction, "Error", "Song unavailable (Age Restriction)");
+        // sendEmbed(interaction, "Error", "Song unavailable (Age Restriction)");
       }
     }
   }
